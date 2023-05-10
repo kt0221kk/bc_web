@@ -1,16 +1,13 @@
 version: '3.8'
 
 services:
-  app:
+  java:
     build: .
     ports:
-      - "8080:8080"
-    depends_on:
-      - db
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/your_database
-      - SPRING_DATASOURCE_USERNAME=your_user
-      - SPRING_DATASOURCE_PASSWORD=your_password
+      - 8080:8080
+    tty: true
+    volumes:
+      - ./server/src:/usr/src:cached
     
   db:
     image: postgres:13
