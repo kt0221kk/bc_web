@@ -10,3 +10,7 @@
     docker exec -it <container_id> psql -U bc -W web_java
 ## javaの実行
     docker-compose exec java bash
+## クラスパスを通す
+    export CLASSPATH=postgresql-42.6.0.jar:$CLASSPATH
+    #これはできないのはなぜ？？
+    export CLASSPATH=postgresql-42.6.0.jar:$CLASSPATH
