@@ -12,5 +12,6 @@
     docker-compose exec java bash
 ## クラスパスを通す
     export CLASSPATH=postgresql-42.6.0.jar:$CLASSPATH
-    #これはできないのはなぜ？？
-    export CLASSPATH=postgresql-42.6.0.jar:$CLASSPATH
+    <!-- これはできないのはなぜ？？ -->
+    <!-- javac -cp postgresql-42.6.0.jar  Main.java -->
+    java -cp ./:postgresql-42.6.0.jar  Main
