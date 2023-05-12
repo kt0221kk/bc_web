@@ -10,8 +10,17 @@
     docker exec -it <container_id> psql -U bc -W web_java
 ## javaの実行
     docker-compose exec java bash
-## クラスパスを通す
+# その他（忘備録用）
+## ビルドができない場合
+### 事例１　　ディレクトリをマウントする権限が足りてない
+1. Docker Desktopを開く
+2. Settingを開く
+3. Resourcesを開く
+4. File sharingを開く
+5. +でマウントする場所を追加
+他にもchmodコマンドでdockerの権限をつよつよにする方法もある
+## クラスパスを通す(環境ファイルに記述済みのため今は不要)
+### 方法１
     export CLASSPATH=postgresql-42.6.0.jar:$CLASSPATH
-    <!-- これはできないのはなぜ？？ -->
-    <!-- javac -cp postgresql-42.6.0.jar  Main.java -->
+### 方法２
     java -cp ./:postgresql-42.6.0.jar  Main

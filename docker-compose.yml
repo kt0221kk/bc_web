@@ -8,7 +8,8 @@ services:
     tty: true
     volumes:
       - ./server/src:/usr/src:cached
-    
+    env_file:
+      - ./javaenvfile.env
   db:
     image: postgres:13
     ports:
