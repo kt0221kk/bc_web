@@ -1,17 +1,14 @@
 version: '3.8'
 
 services:
-  java:
-    build: .
+  app:
+    container_name: tomcat
+    build: ./tomcat
     ports:
-      - 8080:8080
-    tty: true
-    volumes:
-      - ./server/src:/usr/src:cached
-    env_file:
-      - ./javaenvfile.env
+      - "8080:8080"
   db:
-    image: postgres:13
+    container_name: postgresql
+    build: ./postgresql
     ports:
       - "5432:5432"
     environment:
@@ -20,7 +17,8 @@ services:
       - POSTGRES_PASSWORD=2068686
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./db:/docker-entrypoint-initdb.d
+      - ./postgresql/init:/docker-entrypoint-initdb.d
+    restart: always
 
 volumes:
   db-data:
