@@ -1,6 +1,6 @@
 import java.io.IOException;
 import java.servlet.*;
-@WebServlet("/hellotmo")
+@WebServlet("/hello")
 public void doGet(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException{
         PrintWriter out = resp.getWriter();
