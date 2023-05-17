@@ -1,23 +1,27 @@
-<html>
-<head>
-<title>Sample Application JSP Page</title>
-</head>
-<body bgcolor=white>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+    <%@ page import="java.util.*" %>
+        <html>
 
-<table border="0">
-<tr>
-<td align=center>
-<img src="images/tomcat.gif">
-</td>
-<td>
-<h1>Sample Application JSP Page</h1>
-This is the output of a JSP page that is part of the Hello, World
-application.
-</td>
-</tr>
-</table>
+        <head>
+            <title>Sample Application JSP Page</title>
+        </head>
 
-<%= new String("Hello!") %>
+        <body bgcolor=white>
 
-</body>
-</html>
+            <table border="0">
+                <tr>
+                    <td align=center>
+                        <img src="images/tomcat.gif">
+                    </td>
+                    <td>
+                        <h1>JSPで動作中</h1>
+                    </td>
+                </tr>
+            </table>
+
+            <p>現在時刻 <%= new Date()%>
+            </p>
+
+        </body>
+
+        </html>

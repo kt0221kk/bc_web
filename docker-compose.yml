@@ -6,6 +6,8 @@ services:
     build: ./tomcat
     ports:
       - "8080:8080"
+    volumes:
+      - ./tomcat/webapps:/usr/local/tomcat/webapps
   db:
     container_name: postgresql
     build: ./postgresql
