@@ -28,6 +28,15 @@
         <servlet-name>HelloServlet</servlet-name>
         <url-pattern>/jhello</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>Calltest</servlet-name>
+        <servlet-class>calltest.CallTest</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Calltest</servlet-name>
+        <url-pattern>/CallTest</url-pattern>
+    </servlet-mapping>
 <!-- 
     <servlet>
         <servlet-name>xmlregist</servlet>

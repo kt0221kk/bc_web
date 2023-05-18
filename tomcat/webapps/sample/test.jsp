@@ -8,9 +8,9 @@
 </head>
 <body>
 	<form action="<%=request.getContextPath()%>/CallTest" method="post">
-		Postで送信
+		登録したい図書を入力してください
 		<br /> 
-		<input type="text" name="fromJsp" value="Jspでセット" />
+		<input type="text" name="fromJsp" value="たまごクラブ4月号" />
 		<br />
 		<input type="submit" value="実行" />
 	</form>

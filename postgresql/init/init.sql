@@ -3,11 +3,23 @@ SET client_encoding = 'UTF8';
 
 -- テーブルの作成
 CREATE TABLE users (
-  id INTEGER PRIMARY KEY,
-  password VARCHAR(10) NOT NULL,
-  name VARCHAR(40) NOT NULL
+  ID INTEGER PRIMARY KEY,
+  PASSWORD VARCHAR(10) NOT NULL,
+  NAME VARCHAR(40) NOT NULL
+);
+CREATE TABLE T_BOOK (
+  ID SERIAL PRIMARY KEY,
+  TITLE VARCHAR(100) NOT NULL,
+  AUTHOR VARCHAR(40) NOT NULL,
+  STATUS BOOLEAN DEFAULT TRUE,
+  START_DATE DATE,
+  END_DATE DATE
 );
 
 -- データの挿入
-INSERT INTO users(id, password, name) VALUES 
+INSERT INTO users(ID, PASSWORD, name) VALUES 
   (0, 'password', 'admin');
+INSERT INTO T_BOOK (TITLE, AUTHOR, STATUS, START_DATE, END_DATE) VALUES
+('Moby Dick', 'Herman Melville', TRUE, '2023-01-01', '2023-01-31'),
+('To Kill a Mockingbird', 'Harper Lee', FALSE, '2023-02-01', '2023-02-28'),
+('1984', 'George Orwell', TRUE, '2023-03-01', '2023-03-31');
