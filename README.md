@@ -33,3 +33,6 @@ https://hub.docker.com/_/tomcat
     export CLASSPATH=/usr/local/tomcat/lib/servlet-api.jar:$CLASSPATH
 ### 方法２
     java -cp ./:postgresql-42.6.0.jar  Main
+
+
+    docker-compose down --rmi all --volumes 
