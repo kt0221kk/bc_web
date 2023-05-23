@@ -2,41 +2,59 @@
 SET client_encoding = 'UTF8';
 
 -- テーブルの作成
-CREATE TABLE users (
-  ID INTEGER PRIMARY KEY,
-  PASSWORD VARCHAR(10) NOT NULL,
-  NAME VARCHAR(40) NOT NULL
+CREATE TABLE book_tbl (
+  book_id INTEGER PRIMARY KEY NOT NULL,
+  title VARCHAR(100) NOT NULL,
+  author VARCHAR(100) NOT NULL,
+  genre VARCHAR(50),
+  status BOOLEAN NOT NULL DEFAULT TRUE,
+  publication_year INT,
+  ISBN VARCHAR,
+  publisher VARCHAR
 );
-CREATE TABLE T_BOOK (
-  ID SERIAL PRIMARY KEY,
-  TITLE VARCHAR(100) NOT NULL,
-  AUTHOR VARCHAR(40) NOT NULL,
-  STATUS BOOLEAN DEFAULT TRUE,
-  START_DATE DATE,
-  END_DATE DATE
+CREATE TABLE user_tbl (
+  user_id INTEGER PRIMARY KEY NOT NULL,
+  pass VARCHAR(50) NOT NULL,
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  address VARCHAR(255),
+  grade INTEGER NOT NULL
 );
+CREATE TABLE track_tbl (
+  track_id INTEGER PRIMARY KEY NOT NULL,
+  book_id INTEGER NOT NULL REFERENCES book_tbl(book_id),
+  user_id INTEGER NOT NULL REFERENCES user_tbl(user_id),
+  track_status VARCHAR(10) NOT NULL
+);
+CREATE TABLE due_tbl (
+  track_id INTEGER PRIMARY KEY NOT NULL REFERENCES track_tbl(track_id),
+  borrow_date DATE NOT NULL,
+  return_due_date DATE NOT NULL
+);
+CREATE TABLE done_tbl (
+  track_id INTEGER PRIMARY KEY NOT NULL REFERENCES track_tbl(track_id),
+  done_date DATE NOT NULL
+);
+CREATE TABLE reservation_tbl (
+  RESERVATION_ID INTEGER PRIMARY KEY NOT NULL,
+  track_id INTEGER NOT NULL REFERENCES track_tbl(track_id),
+  RESERVATION_DATE DATE NOT NULL
+);
+-- ダミーデータの入力
+INSERT INTO book_tbl (book_id, title, author, genre, status, publication_year, ISBN, publisher) 
+VALUES (1, 'Book Title 1', 'Author 1', 'Genre 1', TRUE, 2022, '123-4567890123', 'Publisher 1');
 
--- データの挿入
-INSERT INTO users(ID, PASSWORD, name) VALUES 
-  (0, 'password', 'admin');
-INSERT INTO T_BOOK (TITLE, AUTHOR, STATUS, START_DATE, END_DATE) VALUES
-('Moby Dick', 'Herman Melville', TRUE, '2023-01-01', '2023-01-31'),
-('To Kill a Mockingbird', 'Harper Lee', FALSE, '2023-02-01', '2023-02-28'),
-('1984', 'George Orwell', TRUE, '2023-03-01', '2023-03-31');
-INSERT INTO T_BOOK (TITLE, AUTHOR, START_DATE, END_DATE)
-VALUES 
-('カートゥーン小説 ヘンな生き物研究', 'Author1', '2023-01-01', '2023-12-31'),
-('きみとチェンジ!? 入れかわり中に', 'Author2', '2023-01-02', '2023-12-31'),
-('いきいき！保育士', 'Author3', '2023-01-03', '2023-12-31'),
-('いみちぇん！（３） ねらわれた主さま', 'Author4', '2023-01-04', '2023-12-31'),
-('ドラゴンボール超 スーパーヒーロー', 'Author5', '2023-01-05', '2023-12-31'),
-('少年探偵 響（３） 夜の学校で七不', 'Author6', '2023-01-06', '2023-12-31'),
-('生き残りゲーム ラストサバイバル', 'Author7', '2023-01-07', '2023-12-31'),
-('恋する和パティシエール １ 夢みる', 'Author8', '2023-01-08', '2023-12-31'),
-('恐怖チャンネル 不幸をまねくコトリ', 'Author9', '2023-01-09', '2023-12-31'),
-('理花のおかしな実験室（６） 波乱だ', 'Author10', '2023-01-10', '2023-12-31'),
-('動物と話せる少女リリアーネ（９）', 'Author11', '2023-01-11', '2023-12-31'),
-('ドリトル先生月へゆく', 'Author12', '2023-01-12', '2023-12-31'),
-('いみちぇん！（１） 今日からひみつ', 'Author13', '2023-01-13', '2023-12-31'),
-('アンデルセン童話集 １', 'Author14', '2023-01-14', '2023-12-31'),
-('動物と話せる少女リリアーネ（７）', 'Author15', '2023-01-15', '2023-12-31');
+INSERT INTO user_tbl (user_id, pass, first_name, last_name, address, grade) 
+VALUES (1, 'hashedpassword', 'First', 'Last', '123 Main St', 5);
+
+INSERT INTO track_tbl (track_id, book_id, user_id, track_status) 
+VALUES (1, 1, 1, '貸出');
+
+INSERT INTO due_tbl (track_id, borrow_date, return_due_date) 
+VALUES (1, '2023-05-01', '2023-05-31');
+
+INSERT INTO done_tbl (track_id, done_date) 
+VALUES (1, '2023-05-31');
+
+INSERT INTO reservation_tbl (RESERVATION_ID, track_id, RESERVATION_DATE) 
+VALUES (1, 1, '2023-04-01');
