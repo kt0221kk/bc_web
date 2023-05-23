@@ -11,6 +11,8 @@ https://hub.docker.com/_/tomcat
 ## はじめに
     docker-compose build
     docker-compose up -d
+## Webサイトへのアクセス
+    http://localhost:8080/library_management_system_bc/
 ## データベースへのアクセス方法
 ### その１
     docker-compose exec db psql -U bc -W web_java
