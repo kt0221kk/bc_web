@@ -1,41 +1,81 @@
-# TOMCATの環境構築
-https://hub.docker.com/_/tomcat
-## 環境変数の設定
-    CATALINA_BASE:   /usr/local/tomcat
-    CATALINA_HOME:   /usr/local/tomcat
-    CATALINA_TMPDIR: /usr/local/tomcat/temp
-    JRE_HOME:        /usr
-    CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
+# 図書管理サイト作成プロジェクト
 
-    # WEBアプリケーション with java
-## はじめに
+Docker Hubの[Tomcat公式イメージ](https://hub.docker.com/_/tomcat)を使用しています。
+
+## 開始手順
+
+1. コンテナをビルドします：
+    ```bash
     docker-compose build
+    ```
+2. コンテナを起動します：
+    ```bash
     docker-compose up -d
+    ```
+
 ## Webサイトへのアクセス
+
+次のURLにアクセスします：
     http://localhost:8080/library_management_system_bc/
+
 ## データベースへのアクセス方法
-### その１
+
+### 方法1
+以下のコマンドで直接アクセスします：
+    ```bash
     docker-compose exec db psql -U bc -W web_java
-### その２
+    ```
+
+### 方法2
+まず、DBのコンテナIDを取得します：
+    ```bash
     docker-compose ps -q db
+    ```
+その後、取得したコンテナIDを使ってデータベースにアクセスします：
+    ```bash
     docker exec -it <container_id> psql -U bc -W web_java
-## javaの実行
+    ```
+
+## Javaの実行方法
+
+1. Javaコンテナのbashを起動します：
+    ```bash
     docker-compose exec java bash
+    ```
+2. Javaのソースコードがあるディレクトリに移動します：
+    ```bash
     cd library_management_system_bc/WEB-INF/src/
-    javac -d ../classes AccessLibraryData.java 
-# その他（忘備録用）
+    ```
+3. Javaファイルをコンパイルします：
+    ```bash
+    javac -d ../classes AccessLibraryData.java
+    ```
+
+# トラブルシューティング
+
 ## ビルドができない場合
-### 事例１　　ディレクトリをマウントする権限が足りてない
-1. Docker Desktopを開く
-2. Settingを開く
-3. Resourcesを開く
-4. File sharingを開く
-5. +でマウントする場所を追加
-他にもchmodコマンドでdockerの権限をつよつよにする方法もある
-## クラスパスを通す(環境ファイルに記述済みのため今は不要)
-### 方法１
+
+### 事例1：ディレクトリをマウントする権限が足りていない
+1. Docker Desktopを開きます。
+2. "Settings"を開きます。
+3. "Resources"を開きます。
+4. "File sharing"を開きます。
+5. "+"ボタンをクリックして、マウントする場所を追加します。
+
+    注： `chmod` コマンドを使用してDockerの権限を強化する方法もあります。
+
+## クラスパスを通す
+
+クラスパスは環境ファイルに記述済みなので、現在は不要です。
+
+### 方法1
+    ```bash
     export CLASSPATH=/usr/local/tomcat/lib/servlet-api.jar:$CLASSPATH
     export CLASSPATH=/usr/local/tomcat/webapps/library_management_system_bc/WEB-INF/src/postgresql-42.6.0.jar:$CLASSPATH
-### 方法２
+    ```
+
+### 方法2
+    ```bash
     java -cp ./:postgresql-42.6.0.jar  Main
-    docker-compose down --rmi all --volumes 
+    docker-compose down --rmi all --volumes
+    ```
