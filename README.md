@@ -79,3 +79,4 @@ http://localhost:8080/library_management_system_bc/
     java -cp ./:postgresql-42.6.0.jar  Main
     docker-compose down --rmi all --volumes
     ```
+export CLASSPATH=/usr/local/tomcat/webapps/library_management_system_bc/WEB-INF/classes:$CLASSPATH

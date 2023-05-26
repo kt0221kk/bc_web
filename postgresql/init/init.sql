@@ -1,6 +1,5 @@
 -- 文字コードの設定
 SET client_encoding = 'UTF8';
-
 -- テーブルの作成
 CREATE TABLE book_tbl (
   book_id INTEGER PRIMARY KEY NOT NULL,
@@ -36,8 +35,7 @@ CREATE TABLE done_tbl (
   done_date DATE NOT NULL
 );
 CREATE TABLE reservation_tbl (
-  RESERVATION_ID INTEGER PRIMARY KEY NOT NULL,
-  track_id INTEGER NOT NULL REFERENCES track_tbl(track_id),
+  track_id INTEGER PRIMARY KEY NOT NULL,
   RESERVATION_DATE DATE NOT NULL
 );
 -- ダミーデータの入力
@@ -57,4 +55,4 @@ INSERT INTO done_tbl (track_id, done_date)
 VALUES (1, '2023-05-31');
 
 INSERT INTO reservation_tbl (RESERVATION_ID, track_id, RESERVATION_DATE) 
-VALUES (1, 1, '2023-04-01');
+VALUES (1, '2023-04-01');
