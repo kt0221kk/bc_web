@@ -40,7 +40,7 @@ http://localhost:8080/library_management_system_bc/
 
 1. Javaコンテナのbashシェルを起動します：
     ```bash
-    docker-compose exec java bash
+    docker-compose exec app bash
     ```
 2. Javaソースコードがあるディレクトリに移動します：
     ```bash
