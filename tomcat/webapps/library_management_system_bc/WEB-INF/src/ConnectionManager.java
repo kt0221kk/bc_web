@@ -1,4 +1,4 @@
-package practice08;
+package library_management_class;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

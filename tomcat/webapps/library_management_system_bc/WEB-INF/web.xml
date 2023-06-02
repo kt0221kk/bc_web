@@ -26,5 +26,23 @@
         <servlet-name>HelloServlet2</servlet-name>
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>library_management_class.LoginUI</servlet-class>
+    </servlet>
 
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LoginCheck</servlet-name>
+        <servlet-class>library_management_class.LoginCheck</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LoginCheck</servlet-name>
+        <url-pattern>/LoginCheck</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -1,50 +1,52 @@
 package library_management_class;
+
 public class Book {
-    private int book_id;
+
+    private int bookId;
     private String title;
     private String author;
     private String genre;
-    private boolean status;
-    private int publication_year;
-    private String ISBN;
+    private String status;
+    private int publicationYear;
+    private String isbn;
     private String publisher;
 
-    // Getters
+    // getters
     public int getBookId() {
-        return book_id;
+        return this.bookId;
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public String getAuthor() {
-        return author;
+        return this.author;
     }
 
     public String getGenre() {
-        return genre;
+        return this.genre;
     }
 
-    public boolean isStatus() {
-        return status;
+    public String getStatus() {
+        return this.status;
     }
 
     public int getPublicationYear() {
-        return publication_year;
+        return this.publicationYear;
     }
 
-    public String getISBN() {
-        return ISBN;
+    public String getIsbn() {
+        return this.isbn;
     }
 
     public String getPublisher() {
-        return publisher;
+        return this.publisher;
     }
 
-    // Setters
-    public void setBookId(int book_id) {
-        this.book_id = book_id;
+    // setters
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
     }
 
     public void setTitle(String title) {
@@ -59,19 +61,20 @@ public class Book {
         this.genre = genre;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public void setPublicationYear(int publication_year) {
-        this.publication_year = publication_year;
+    public void setPublicationYear(int publicationYear) {
+        this.publicationYear = publicationYear;
     }
 
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
+
 }

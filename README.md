@@ -12,7 +12,6 @@
     ```bash
     docker-compose up -d
     ```
-
 ## Webサイトへのアクセス方法
 
 以下のURLをブラウザで開いてください：   

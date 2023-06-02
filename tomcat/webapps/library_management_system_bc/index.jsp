@@ -45,6 +45,8 @@
         <ul class="list-unstyled">
           <li><a href="hello" >図書の登録</a></li>
           <li><a href="AccessLibraryData" >書籍情報の検索</a></li>
+          <li><a href="logout">ログアウト</a></li>
+
         </ul>
       </div>
     </div>
