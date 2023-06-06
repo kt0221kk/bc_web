@@ -6,10 +6,14 @@
 <html>
 <head>
 <title>ログインページ</title>
-</head>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+</head>     
 <body>
 
-<h1>ログアウトしました</h1>
+<h1>ログアウトしました</h1> 
+<!-- ログアウト時の画面 --> 
+
 <li><a href="/library_management_system_bc" >ホームに戻る</a></li>
 
 

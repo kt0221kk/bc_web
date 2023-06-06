@@ -28,17 +28,18 @@ public class ConnectionManager {
 	/**
 	 * 接続URL
 	 */
-	private static final String URL = "jdbc:postgresql://localhost:5432/jdbc";
+	private static final String URL = "jdbc:postgresql://db:5432/web_java";
+
 
 	/**
 	 * 接続ユーザ
 	 */
-	private static final String USER = "jdbc";
+	private static final String USER = "bc";
 
 	/**
 	 * 接続パスワード
 	 */
-	private static final String PASSWORD = "jdbc";
+	private static final String PASSWORD = "2068686";
 
 	static {
 		try {

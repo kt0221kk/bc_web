@@ -1,14 +1,59 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>書籍情報について検索してください</title>
-</head>
-<body>
-    <h1>最近更新があったデータ</h1>
-    <p>
-        Book Name: <%= request.getAttribute("book_name") %>
-    </p>
-</body>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="css/plot_book_data.css" />
+    <%@ page import="java.util.ArrayList, library_management_class.Book" %>
+  </head>
+  <body>
+    <%@ include file="header.jsp" %>
+
+    <h1>書籍情報</h1>
+    <!-- 書籍情報のテーブル -->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">書籍ID</th>
+          <th scope="col">書籍名</th>
+          <th scope="col">著者名</th>
+          <th scope="col">出版社</th>
+          <th scope="col">出版日</th>
+          <th scope="col">ISBN</th>
+          <th scope="col">ジャンル</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ArrayList<Book>から表を作る -->
+        <%
+          ArrayList<Book> bookList = (ArrayList<Book>)request.getAttribute("bookList");
+          for (Book book : bookList) {
+        %>
+        <tr>
+          <th scope="row"><%= book.getBookId() %></th>
+          <td><%= book.getTitle() %></td>
+          <td><%= book.getAuthor() %></td>
+          <td><%= book.getPublisher() %></td>
+          <td><%= book.getPublicationYear() %></td>
+          <td><%= book.getIsbn() %></td>
+          <td><%= book.getGenre() %></td>
+
+        </tr>
+        <%
+          }
+        %>
+      </tbody>
+  </body>
 </html>

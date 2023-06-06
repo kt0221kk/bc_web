@@ -10,33 +10,48 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">検索</a>
+                <a class="nav-link active" aria-current="page" href="AccessLibraryData">検索</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#">登録</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                登録
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="registerBook.jsp">書籍登録</a></li>
+                    <li><a class="dropdown-item" href="registerUser.jsp">ユーザ登録</a></li>
+                </ul>
             </li>
-            <li class="nav-item">
                 <%
-                    HttpSession mySession = request.getSession(false);
-                    String user = mySession.getAttribute("user")
-                    if (mySession != null && mySession.getAttribute("user") != null){
+                HttpSession mySession = request.getSession(false);
+                if (mySession != null) {
+                    String user = (String) mySession.getAttribute("user"); // move inside null check
+                    if (user != null){
                 %>
-                    <a class="nav-link active" href="logoutServlet" >ログアウト</a>
+                    <a class="nav-link active" href="logout" >ログアウト</a>
                 <%
                     } else {
                 %>
                     <a class="nav-link active" href="login.jsp" >ログイン</a>
                 <%
                     }
+                }
                 %>
             
                 
             </li>
             </ul>
-            <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            <!-- 右側に「ようこそユーザ名さん」と表示 -->
+            <div class="d-flex">
+                <%
+                if (mySession != null) {
+                    String user = (String) mySession.getAttribute("user"); // move inside null check
+                    if (user != null){
+                %>
+                    <a class="nav-link active" href="logout" >ようこそ <%= user %> さん</a>
+                <%
+                    }
+                }
+                %>
         </div>
         </div>
     </nav>

@@ -5,7 +5,7 @@ CREATE TABLE book_tbl (
   genre VARCHAR(255),
   status VARCHAR(255),
   publication_year INTEGER,
-  isbn VARCHAR(255),
+  ISBN VARCHAR(255),
   publisher VARCHAR(255)
 );
 

@@ -27,13 +27,13 @@ public class LoginCheck extends HttpServlet {
         /* ログインページへのリダイレクトをチェック */
         if (target != null && target.equals("/library_management_system_bc/login.jsp")) {
             response.sendRedirect("/library_management_system_bc/");
-        } else if (target != null && target.equals("library_management_system_bc/LoginCheck")) {
+        } else if (target == null) {
             response.sendRedirect("/library_management_system_bc/");
         } else {
             response.sendRedirect(target);
         }
     } else {
-        /* 認証に失敗したら、ログイン画面に戻す */
+        /* 認証に失敗したら、ログイン画面に戻 */
         session.setAttribute("status", "Not Auth");
         response.sendRedirect("/library_management_system_bc/login.jsp");
     }

@@ -43,18 +43,92 @@ public class UserDao {
     }
 
     public boolean update(User user) {
-        // TODO: Implement this method
-        return false;
+        PreparedStatement preparedStatement = null;
+        try{
+            String sql = "UPDATE user_tbl SET pass = ?, first_name = ?, last_name = ?, address = ? WHERE user_id = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, user.getPassword());
+            preparedStatement.setString(2, user.getFirstName());
+            preparedStatement.setString(3, user.getLastName());
+            preparedStatement.setString(4, user.getAddress());
+            preparedStatement.setInt(5, user.getUserId());
+            int result = preparedStatement.executeUpdate();
+            if (result == 1){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(SQLException e){
+            throw new RuntimeException("user_tblのUPDATEに失敗しました", e);
+        }finally{
+            try{
+                if (preparedStatement != null){
+                    preparedStatement.close();
+                }
+            }catch(SQLException e){
+                throw new RuntimeException("ユーザ情報更新時のステートメントの解放に失敗しました", e);
+            }
+        }
     }
 
     public boolean delete(int userId) {
-        // TODO: Implement this method
-        return false;
+        PreparedStatement preparedStatement = null;
+        try{
+            String sql = "DELETE FROM user_tbl WHERE user_id = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            int result = preparedStatement.executeUpdate();
+            if (result == 1){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(SQLException e){
+            throw new RuntimeException("user_tblのDELETEに失敗しました", e);
+        }finally{
+            try{
+                if (preparedStatement != null){
+                    preparedStatement.close();
+                }
+            }catch(SQLException e){
+                throw new RuntimeException("ユーザ情報削除時のステートメントの解放に失敗しました", e);
+            }
+        }
     }
 
     public User find(int userId) {
-        // TODO: Implement this method
-        return null;
+        PreparedStatement preparedStatement = null;
+        try{
+            String sql = "SELECT * FROM user_tbl WHERE user_id = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                String password = resultSet.getString("pass");
+                String first_name = resultSet.getString("first_name");
+                String last_name = resultSet.getString("last_name");
+                String address = resultSet.getString("address");
+                User user = new User();
+                user.setUserId(userId);
+                user.setPassword(password);
+                user.setFirstName(first_name);
+                user.setLastName(last_name);
+                user.setAddress(address);
+                return user;
+            }else{
+                return null;
+            }
+        }catch(SQLException e){
+            throw new RuntimeException("user_tblのSELECTに失敗しました", e);
+        }finally{
+            try{
+                if (preparedStatement != null){
+                    preparedStatement.close();
+                }
+            }catch(SQLException e){
+                throw new RuntimeException("ユーザ情報検索時のステートメントの解放に失敗しました", e);
+            }
+        }
     }
 
     public ArrayList<User> findAll() {
