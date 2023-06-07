@@ -1,5 +1,5 @@
 package library_management_class;
-
+import java.util.Date;
 public class Book {
 
     private int bookId;
@@ -10,6 +10,7 @@ public class Book {
     private int publicationYear;
     private String isbn;
     private String publisher;
+    private Date createdAt;
 
     // getters
     public int getBookId() {
@@ -44,6 +45,9 @@ public class Book {
         return this.publisher;
     }
 
+    public Date getCreatedAt() {
+        return this.createdAt;
+    }
     // setters
     public void setBookId(int bookId) {
         this.bookId = bookId;
@@ -75,6 +79,10 @@ public class Book {
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
 }

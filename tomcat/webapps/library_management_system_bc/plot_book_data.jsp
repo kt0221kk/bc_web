@@ -26,6 +26,7 @@ pageEncoding="UTF-8" %>
     <table class="table table-striped">
       <thead>
         <tr>
+          <th scope="col">貸し出し状態</th>
           <th scope="col">書籍ID</th>
           <th scope="col">書籍名</th>
           <th scope="col">著者名</th>
@@ -42,7 +43,14 @@ pageEncoding="UTF-8" %>
           for (Book book : bookList) {
         %>
         <tr>
-          <th scope="row"><%= book.getBookId() %></th>
+          <!-- Availableなら貸出可能,Resevedなら予約と表示し先頭に色付きの丸で表現する-->
+          <td>
+            <% if (book.getStatus().equals("貸出可能")) { %>
+              <span class="badge bg-success">貸出可能</span>
+            <% } else { %>
+              <span class="badge bg-danger">貸出中</span>
+            <% } %>
+          <td><%= book.getBookId() %></td>
           <td><%= book.getTitle() %></td>
           <td><%= book.getAuthor() %></td>
           <td><%= book.getPublisher() %></td>

@@ -4,8 +4,7 @@ public class User {
 
     private int userId;
     private String password;
-    private String firstName;
-    private String lastName;
+    private String userName;
     private String address;
 
     // getters
@@ -17,12 +16,8 @@ public class User {
         return this.password;
     }
 
-    public String getFirstName() {
-        return this.firstName;
-    }
-
-    public String getLastName() {
-        return this.lastName;
+    public String getUserName() {
+        return this.userName;
     }
 
     public String getAddress() {
@@ -38,16 +33,11 @@ public class User {
         this.password = password;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void setAddress(String address) {
         this.address = address;
     }
-
 }

@@ -2,7 +2,10 @@ package library_management_class;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-
+import library_management_class.ConnectionManager;
+import library_management_class.UserDao;
+import java.sql.*;
+import java.util.ArrayList;
 public class LoginCheck extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
@@ -41,11 +44,16 @@ public class LoginCheck extends HttpServlet {
 
 
   protected boolean authUser(String user, String pass){
-    /* 取りあえずユーザー名とパスワードが入力されていれば認証する */
-    if (user == null || user.length() == 0 || pass == null || pass.length() == 0){
-      return false;
+    ConnectionManager connectionManager = new ConnectionManager();
+    Connection connection = connectionManager.getConnection();
+    UserDao userDao = new UserDao(connection);
+    ArrayList<User> userList = userDao.selectByUserName(user);
+    for (User u : userList){
+        if (u.getPassword().equals(pass)){
+            return true;
+        }
     }
 
-    return true;
+    return false;
   }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import library_management_class.ConnectionManager;
 import library_management_class.Book;
+import java.util.Date;
 
 import java.sql.*;
 public class BookDao {
@@ -25,6 +26,8 @@ public class BookDao {
             preparedStatement.setString(6, book.getIsbn());
             preparedStatement.setString(7, book.getPublisher());
             int result = preparedStatement.executeUpdate();
+            connection.commit();
+
             return result;
         }catch(SQLException e){
             throw new RuntimeException("book_tblのINSERTに失敗しました", e);
@@ -207,6 +210,42 @@ public class BookDao {
                 book.setPublicationYear(resultSet.getInt("publication_year"));
                 book.setIsbn(resultSet.getString("ISBN"));
                 book.setPublisher(resultSet.getString("publisher"));
+                book.setCreatedAt(resultSet.getDate("created_at"));
+                bookList.add(book);
+            }
+            return bookList;
+        }catch(SQLException e){
+            throw new RuntimeException("book_tblのSELECTに失敗しました", e);
+        }finally{
+            try{
+                if (preparedStatement != null){
+                    preparedStatement.close();
+                }
+            }catch(SQLException e){
+                throw new RuntimeException("本情報検索時のステートメントの解放に失敗しました", e);
+            }
+        }
+    }
+    public ArrayList<Book> selectByCreatedAt(Date start_date, Date end_date) {
+        PreparedStatement preparedStatement = null;
+        try{
+            String sql = "SELECT * FROM book_tbl WHERE created_at BETWEEN ? AND ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setDate(1,new java.sql.Date(start_date.getTime()));
+            preparedStatement.setDate(2,new java.sql.Date(end_date.getTime()));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<Book> bookList = new ArrayList<Book>();
+            while(resultSet.next()){
+                Book book = new Book();
+                book.setBookId(resultSet.getInt("book_id"));
+                book.setTitle(resultSet.getString("title"));
+                book.setAuthor(resultSet.getString("author"));
+                book.setGenre(resultSet.getString("genre"));
+                book.setStatus(resultSet.getString("status"));
+                book.setPublicationYear(resultSet.getInt("publication_year"));
+                book.setIsbn(resultSet.getString("ISBN"));
+                book.setPublisher(resultSet.getString("publisher"));
+                book.setCreatedAt(resultSet.getDate("created_at"));
                 bookList.add(book);
             }
             return bookList;

@@ -33,9 +33,10 @@ pageEncoding="UTF-8"%>
       <div class="row mt-4">
         <div class="col-md-12">
           <ul class="list-unstyled">
-            <li><a href="hello">図書の登録</a></li>
+            <li><a href="RegisterBookUI">図書の登録</a></li>
             <li><a href="AccessLibraryData">書籍情報の検索</a></li>
             <li><a href="logout">ログアウト</a></li>
+            <%= request.getAttribute("insert_status") %>
           </ul>
         </div>
       </div>
