@@ -26,7 +26,6 @@ public class BookDao {
             preparedStatement.setString(6, book.getIsbn());
             preparedStatement.setString(7, book.getPublisher());
             int result = preparedStatement.executeUpdate();
-            connection.commit();
 
             return result;
         }catch(SQLException e){
@@ -145,6 +144,7 @@ public class BookDao {
                 book.setPublicationYear(resultSet.getInt("publication_year"));
                 book.setIsbn(resultSet.getString("ISBN"));
                 book.setPublisher(resultSet.getString("publisher"));
+                book.setCreatedAt(resultSet.getTimestamp("created_at"));
                 bookList.add(book);
             }
             return bookList;

@@ -17,8 +17,8 @@
                 登録
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="registerBook.jsp">書籍登録</a></li>
-                    <li><a class="dropdown-item" href="registerUser.jsp">ユーザ登録</a></li>
+                    <li><a class="dropdown-item" href="RegisterBookUI">書籍登録</a></li>
+                    <li><a class="dropdown-item" href="RegisterUserUI">ユーザ登録</a></li>
                 </ul>
             </li>
                 <%

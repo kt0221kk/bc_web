@@ -2,5 +2,10 @@
 body {
     background-color: #f0f0f0;
     /* 背景を画像にする */
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    position: relative; /* Add this */
     
 }

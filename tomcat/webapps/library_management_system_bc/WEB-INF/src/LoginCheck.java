@@ -18,11 +18,12 @@ public class LoginCheck extends HttpServlet {
 
     HttpSession session = request.getSession(true);
 
-    boolean check = authUser(user, pass);
+    boolean check = authUser(user, pass, session);
     if (check) {
         /* 認証済みにセット */
         session.setAttribute("login", "OK");
         session.setAttribute("user", user);
+        
 
         /* 本来のアクセス先へ飛ばす */
         String target = (String) session.getAttribute("target");
@@ -43,13 +44,14 @@ public class LoginCheck extends HttpServlet {
 }
 
 
-  protected boolean authUser(String user, String pass){
+  protected boolean authUser(String user, String pass,HttpSession session){
     ConnectionManager connectionManager = new ConnectionManager();
     Connection connection = connectionManager.getConnection();
     UserDao userDao = new UserDao(connection);
     ArrayList<User> userList = userDao.selectByUserName(user);
     for (User u : userList){
         if (u.getPassword().equals(pass)){
+            session.setAttribute("user_id", u.getUserId());
             return true;
         }
     }

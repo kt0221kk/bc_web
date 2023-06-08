@@ -21,7 +21,7 @@ public class RegisterBookServlet extends HttpServlet {
                 session.setAttribute("target", target);
                 response.sendRedirect("/library_management_system_bc/login.jsp");
             } else {
-                RequestDispatcher dispatch = request.getRequestDispatcher("register_book.jsp");
+                RequestDispatcher dispatch = request.getRequestDispatcher("WEB-INF/jsp/register_book.jsp");
                 dispatch.forward(request, response);
             }
     }

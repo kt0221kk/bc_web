@@ -4,21 +4,15 @@ pageEncoding="UTF-8"%>
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
     <title>図書管理サイト</title>
-    
-    
-    <%@ include file="head.jsp" %>
+    <%@ include file="WEB-INF/jsp/head.jsp" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css" />
 
   </head>
   <body>
     <div class="overlay"></div>
 
-    <%@ include file="header.jsp" %>
+    <%@ include file="WEB-INF/jsp/header.jsp" %>
 
     <div class="container py-5">
       <div class="row">
@@ -35,8 +29,6 @@ pageEncoding="UTF-8"%>
           <ul class="list-unstyled">
             <li><a href="RegisterBookUI">図書の登録</a></li>
             <li><a href="AccessLibraryData">書籍情報の検索</a></li>
-            <li><a href="logout">ログアウト</a></li>
-            <%= request.getAttribute("insert_status") %>
           </ul>
         </div>
       </div>

@@ -14,11 +14,10 @@ public class UserDao {
         // TODO: Implement this method
         PreparedStatement preparedStatement = null;
         try {
-            String sql = "INSERT INTO user_tbl (password, user_name, address) VALUES(?,?,?)";
+            String sql = "INSERT INTO user_tbl (password, user_name) VALUES(?,?)";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, user.getPassword());
             preparedStatement.setString(2, user.getUserName());
-            preparedStatement.setString(3, user.getAddress());
             int result = preparedStatement.executeUpdate();
             return result;
         } catch (SQLException e) {
