@@ -1,27 +1,70 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="library_management_class.Book" %>
+<%@ page import="java.util.ArrayList, library_management_class.Track, library_management_class.Due, library_management_class.Reservation" %>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Book Details</title>
 <%@ include file="head.jsp" %>
-<!--jQuery JS-->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" /></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css"> -->
-
 
 <link rel="stylesheet" type="text/css" href="bootstrap-datepicker-1.9.0-dist/css/bootstrap-datepicker.min.css">
 <script type="text/javascript" src="bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="bootstrap-datepicker-1.9.0-dist/locales/bootstrap-datepicker.ja.min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+<script>
+    var trackList = [
+        <%
+            ArrayList<Track> trackList = (ArrayList<Track>)request.getAttribute("trackList");
+            Book book1 = (Book)request.getAttribute("book");
+            for(Track track : trackList){
+        %>
+            {
+                title: "<%=track.getTrackStatus() %>",
+                start: "<%=track.getTrackTime() %>",
+                color: <% if(track.getTrackStatus().equals("書籍登録")){ %>
+                    "blue"
+                <% }else if(track.getTrackStatus().equals("貸出")){ %>
+                    "green"
+                <% } else if(track.getTrackStatus().equals("予約")){ %>
+                        "yellow"
+                <% } %>,
+                <% if(track.getTrackStatus().equals("貸出")){ 
+                    Due due = (Due)track;
+                %>
+                end: "<%=due.getReturnDueDate() %>",
+                <% } %>
+                <% if(track.getTrackStatus().equals("予約")){ 
+                    Reservation reservation = (Reservation)track;
+                    %>
+                end: "<%=reservation.getReservationEndDate() %>",
+                <% } %>
+                <% if(track.getTrackStatus().equals("予約")){ 
+                    Reservation reservation = (Reservation)track;
+                    %>
+                    textColor: "black",
+                <% } %>
+            },
+        <%
+            }
+        %>
+
+    ];
+    
+</script>
+
+<script src="js/detail_book_calendar.js"></script>
+
 
 </head>
 <body class="container mt-5">
     <%@ include file="header.jsp" %>
-    <jsp:useBean id="book" type="library_management_class.Book" scope="request" />
-
+    
+    
+        <jsp:useBean id="book" type="library_management_class.Book" scope="request" />
+    
     <h1 class="mb-4"><%= book.getTitle() %></h1>
 
     <table class="table table-striped">
@@ -62,7 +105,7 @@
             <!-- Add other book details as required -->
         </tbody>
     </table>
-
+    <div id='calendar'></div>
     <div class="mt-4">
         <a href="AccessLibraryData" class="btn btn-primary">書籍一覧に戻る</a>
         <!-- <a href="#" class="btn btn-warning" id="reservationButton">予約</a> -->
@@ -73,38 +116,40 @@
     
 
 <div class="input-daterange input-group">
-    <input type="text" class="input-sm form-control" name="start" />
+    <input type="text" class="input-sm form-control" name="start" placeholder="貸出開始日"/>
     <span class="input-group-addon">to</span>
-    <input type="text" class="input-sm form-control" name="end" />
+    <input type="text" class="input-sm form-control" name="end" placeholder="返却予定日"/>
 </div>
+
+</body>
+</html>
+
 <script>
     var invalidDate = new Date('2023-06-21');
     $('.input-daterange').datepicker({
-    todayBtn: "linked",
-    multidateSeparator: ",",
-    orientation: "right bottom",
-    // daysOfWeekHighlighted: "1,5",
-    datesDisabled: ['06/10/2023', '06/21/2023'],
-    toggleActive: true
-}).on('changeDate', function (e) {
-    var selectedDate = e.date;
-    var startDate = $('.input-daterange').data('datepicker').dates[0];
-    var endDate = $('.input-daterange').data('datepicker').dates[1];
-    
-    if (startDate && endDate) {
-        // Convert selected dates to Date objects
-        var startDateObj = new Date(startDate);
-        var endDateObj = new Date(endDate);
+        todayBtn: "linked",
+        multidateSeparator: ",",
+        orientation: "right bottom",
+        // daysOfWeekHighlighted: "1,5",
+        datesDisabled: ['06/10/2023', '06/21/2023'],
+        toggleActive: true
+    }).on('changeDate', function (e) {
+        var selectedDate = e.date;
+        var startDate = $('.input-daterange').data('datepicker').dates[0];
+        var endDate = $('.input-daterange').data('datepicker').dates[1];
+        
+        if (startDate && endDate) {
+            // Convert selected dates to Date objects
+            var startDateObj = new Date(startDate);
+            var endDateObj = new Date(endDate);
 
-        // Check if invalidDate is within selected range
-        if ((invalidDate >= startDateObj && invalidDate <= endDateObj)) {
-            setTimeout(function() {
-                $('.input-daterange').datepicker('clearDates');
-                alert('Invalid range selected. The date 2023-06-21 cannot be within the selected range.');
-            }, 1);
+            // Check if invalidDate is within selected range
+            if ((invalidDate >= startDateObj && invalidDate <= endDateObj)) {
+                setTimeout(function() {
+                    $('.input-daterange').datepicker('clearDates');
+                    alert('選択した範囲に無効な日付が含まれています。再度選択を行ってください');
+                }, 1);
+            }
         }
-    }
-});
+    });
 </script>
-</body>
-</html>

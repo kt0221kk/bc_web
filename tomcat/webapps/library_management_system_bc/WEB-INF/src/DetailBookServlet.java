@@ -9,8 +9,10 @@ import library_management_class.BookDao;
 import library_management_class.OperateBook;
 import library_management_class.ConnectionManager;
 import java.util.ArrayList;
-
-
+import library_management_class.Track;
+import library_management_class.TrackDao;
+import library_management_class.Due;
+import library_management_class.Reservation;
 @WebServlet("/DetailBook")
 public class DetailBookServlet extends HttpServlet {
     public DetailBookServlet(){
@@ -42,10 +44,12 @@ public class DetailBookServlet extends HttpServlet {
             BookDao bookDao = new BookDao(connection);
             int bookId = Integer.parseInt(request.getParameter("book_id"));
             Book book = bookDao.selectById(bookId);
+            TrackDao trackDao = new TrackDao(connection);
+            ArrayList<Track> trackList = trackDao.selectByBookId(bookId);
+            request.setAttribute("trackList", trackList);
             request.setAttribute("book", book);
             
             RequestDispatcher dispatch = request.getRequestDispatcher("WEB-INF/jsp/detail_book.jsp");
-    
             dispatch.forward(request, response);
         }
 }

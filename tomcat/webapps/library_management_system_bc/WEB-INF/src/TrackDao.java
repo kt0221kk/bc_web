@@ -234,7 +234,7 @@ public class TrackDao{
             preparedStatement.setInt(1, bookId);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                if(resultSet.getString("track_status").equals("返却")||resultSet.getString("track_status").equals("予約取消")){
+                if(resultSet.getString("track_status").equals("返却")||resultSet.getString("track_status").equals("予約取消")||resultSet.getString("track_status").equals("書籍登録")||resultSet.getString("track_status").equals("ユーザ情報更新")){
                     Track track = new Track();
                     track.setTrackId(resultSet.getInt("track_id"));
                     track.setBookId(resultSet.getInt("book_id"));
@@ -324,7 +324,7 @@ public class TrackDao{
             preparedStatement.setInt(1, userId);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                if(resultSet.getString("track_status").equals("返却")||resultSet.getString("track_status").equals("予約取消")){
+                if(resultSet.getString("track_status").equals("返却")||resultSet.getString("track_status").equals("予約取消")||resultSet.getString("track_status").equals("書籍登録")||resultSet.getString("track_status").equals("ユーザ情報更新")){
                     Track track = new Track();
                     track.setTrackId(resultSet.getInt("track_id"));
                     track.setBookId(resultSet.getInt("book_id"));
