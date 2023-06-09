@@ -2,7 +2,6 @@
 <%@ page import="javax.servlet.*" %>
 <%@ page import="javax.servlet.http.*" %>
 <%@ page import="java.io.*" %>
-
 <html>
 <head>
 <title>ログインページ</title>

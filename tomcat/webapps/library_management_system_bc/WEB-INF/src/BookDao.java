@@ -112,6 +112,7 @@ public class BookDao {
                 book.setPublicationYear(resultSet.getInt("publication_year"));
                 book.setIsbn(resultSet.getString("ISBN"));
                 book.setPublisher(resultSet.getString("publisher"));
+                book.setCreatedAt(resultSet.getTimestamp("created_at"));
             }
             return book;
         }catch(SQLException e){

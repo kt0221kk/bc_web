@@ -9,6 +9,17 @@ pageEncoding="UTF-8" %>
     
     <link rel="stylesheet" href="css/plot_book_data.css" />
     <%@ page import="java.util.ArrayList, library_management_class.Book" %>
+    <script>
+      $(document).ready(function(){
+        $(".badge").hover(function(){
+          // マウスカーソルが要素に重なったときの処理
+          $(this).css("color", "gray");
+          }, function(){
+          // マウスカーソルが要素から離れたときの処理
+          $(this).css("color", "white");
+        });
+      });
+      </script>
   </head>
   <body>
     <%@ include file="header.jsp" %>
@@ -37,10 +48,21 @@ pageEncoding="UTF-8" %>
         <tr>
           <!-- Availableなら貸出可能,Resevedなら予約と表示し先頭に色付きの丸で表現する-->
           <td>
-            <% if (book.getStatus().equals("貸出可能")) { %>
-              <span class="badge bg-success">貸出可能</span>
+            <% 
+              String action_url = "DetailBook?book_id=" + book.getBookId();
+              if (book.getStatus().equals("貸出可能")) { 
+            %>
+              
+              <a href="<%= action_url %>" style="text-decoration: none;">
+                <span class="badge bg-success">
+                    貸出可能
+                </span>
+              </a>
             <% } else { %>
-              <span class="badge bg-danger">貸出中</span>
+              <a href="<%= action_url %>" style="text-decoration: none;">
+
+                <span class="badge bg-danger">貸出中</span>
+              </a>
             <% } %>
           <td><%= book.getBookId() %></td>
           <td><%= book.getTitle() %></td>
