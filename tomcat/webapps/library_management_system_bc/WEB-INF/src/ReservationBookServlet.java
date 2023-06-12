@@ -251,7 +251,7 @@ public class ReservationBookServlet extends HttpServlet {
             bookDao.update(book);
             connectionManager.commit();
             UserDao userDao = new UserDao(connection);
-            User user = userDao.find(userId);
+            User user = userDao.selectByUserId(userId);
             connectionManager.closeConnection();
             request.setAttribute("book", book);
             request.setAttribute("book_status", book_status);

@@ -60,9 +60,40 @@ public class UserDao {
             }
         }
     }
-
-    // Remainder of class as is, but update `find` and `findAll` methods to reflect schema changes
-    public User find(int userId) {
+    public ArrayList<User> selectByUserName(String userName){
+        ArrayList<User> userList = new ArrayList<User>();
+        PreparedStatement preparedStatement = null;
+        try{
+            String sql = "SELECT * FROM user_tbl WHERE user_name LIKE ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "%" + userName + "%");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                int user_id = resultSet.getInt("user_id");
+                String password = resultSet.getString("password");
+                String user_name = resultSet.getString("user_name");
+                String address = resultSet.getString("address");
+                User user = new User();
+                user.setUserId(user_id);
+                user.setPassword(password);
+                user.setUserName(user_name);
+                user.setAddress(address);
+                userList.add(user);
+            }
+            return userList;
+        }catch(SQLException e){
+            throw new RuntimeException("user_tblのSELECTに失敗しました", e);
+        }finally{
+            try{
+                if (preparedStatement != null){
+                    preparedStatement.close();
+                }
+            }catch(SQLException e){
+                throw new RuntimeException("ステートメントの解放に失敗しました", e);
+            }
+        }
+    }
+    public User selectByUserId(int userId) {
         PreparedStatement preparedStatement = null;
         try{
             String sql = "SELECT * FROM user_tbl WHERE user_id = ?";
@@ -94,8 +125,7 @@ public class UserDao {
             }
         }
     }
-
-    public ArrayList<User> findAll() {
+    public ArrayList<User> selectAll() {
         ArrayList<User> userList = new ArrayList<User>();
         PreparedStatement preparedStatement = null;
         try {
@@ -125,39 +155,6 @@ public class UserDao {
                     preparedStatement.close();
                 }
             } catch (SQLException e) {
-                throw new RuntimeException("ステートメントの解放に失敗しました", e);
-            }
-        }
-    }
-    public ArrayList<User> selectByUserName(String userName){
-        ArrayList<User> userList = new ArrayList<User>();
-        PreparedStatement preparedStatement = null;
-        try{
-            String sql = "SELECT * FROM user_tbl WHERE user_name LIKE ?";
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, "%" + userName + "%");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()){
-                int user_id = resultSet.getInt("user_id");
-                String password = resultSet.getString("password");
-                String user_name = resultSet.getString("user_name");
-                String address = resultSet.getString("address");
-                User user = new User();
-                user.setUserId(user_id);
-                user.setPassword(password);
-                user.setUserName(user_name);
-                user.setAddress(address);
-                userList.add(user);
-            }
-            return userList;
-        }catch(SQLException e){
-            throw new RuntimeException("user_tblのSELECTに失敗しました", e);
-        }finally{
-            try{
-                if (preparedStatement != null){
-                    preparedStatement.close();
-                }
-            }catch(SQLException e){
                 throw new RuntimeException("ステートメントの解放に失敗しました", e);
             }
         }

@@ -14,15 +14,9 @@ public class OperateUser {
 
     public ArrayList<User> searchAllUsers() {
         UserDao userDao = new UserDao(connection);
-        ArrayList<User> userList = userDao.findAll();
+        ArrayList<User> userList = userDao.selectAll();
         return userList;
     }
-
-    // public ArrayList<User> searchUser(String userName) {
-    //     UserDao userDao = new UserDao(connection);
-    //     ArrayList<User> userList = userDao.selectByUserName(userName);
-    //     return userList;
-    // }
 
     public boolean registerUser(User user) {
         UserDao userDao = new UserDao(connection);
@@ -47,11 +41,6 @@ public class OperateUser {
     public boolean updateUser(User user) {
         UserDao userDao = new UserDao(connection);
         boolean result = userDao.update(user);
-        return result;
-    }
-    public boolean deleteUser(User user) {
-        UserDao userDao = new UserDao(connection);
-        boolean result = userDao.delete(user.getUserId());
         return result;
     }
     

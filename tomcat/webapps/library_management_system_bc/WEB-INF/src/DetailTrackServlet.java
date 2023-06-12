@@ -40,7 +40,7 @@ public class DetailTrackServlet extends HttpServlet {
             Track my_track = trackDao.selectByTrackId(trackId);
             request.setAttribute("track", my_track);
             UserDao userDao = new UserDao(connection);
-            User user = userDao.find(my_track.getUserId());
+            User user = userDao.selectByUserId(my_track.getUserId());
             request.setAttribute("user", user);
             
             BookDao bookDao = new BookDao(connection);
