@@ -3,16 +3,18 @@ package library_management_class;
 import java.io.IOException;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.sql.*;
 import library_management_class.Book;
 import library_management_class.OperateBook;
 import library_management_class.ConnectionManager;
 import java.util.ArrayList;
-public class AccessLibraryData extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	public AccessLibraryData() {
+@WebServlet("/PlotBookData")
+public class PlotBookDataServlet extends HttpServlet {
+
+	public PlotBookDataServlet() {
 		super();
 	}
 
@@ -44,5 +46,6 @@ public class AccessLibraryData extends HttpServlet {
             // Forwarding the request to "plot_book_data.jsp"
             RequestDispatcher dispatch = request.getRequestDispatcher("WEB-INF/jsp/plot_book_data.jsp");
             dispatch.forward(request, response);
+            System.out.println("AccessLibraryData.java: doGet()");
         }
 }

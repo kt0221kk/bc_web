@@ -1,11 +1,14 @@
 package library_management_class;
 import java.io.*;
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import library_management_class.ConnectionManager;
 import library_management_class.UserDao;
 import java.sql.*;
 import java.util.ArrayList;
+
+@WebServlet("/LoginCheck")
 public class LoginCheck extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {

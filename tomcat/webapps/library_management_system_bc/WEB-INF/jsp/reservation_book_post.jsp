@@ -63,7 +63,7 @@
     <!-- 前のページに戻る -->
     <div class="row">
         <div class="col-2">
-            <a href="/library_management_system_bc/AccessLibraryData"><input type="submit" class="btn btn-primary" name="back" value="前のページに戻る"></a>
+            <a href="/library_management_system_bc/PlotBookData"><input type="submit" class="btn btn-primary" name="back" value="前のページに戻る"></a>
         </div>
         <div class="col-2">
             <input type="submit" class="btn btn-primary" name="top" value="トップページに戻る">
