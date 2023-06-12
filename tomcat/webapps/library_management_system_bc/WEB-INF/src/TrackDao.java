@@ -121,7 +121,47 @@ public class TrackDao{
             // LocalDateTimeをTimestampに変換
             Timestamp timestampInJapan = Timestamp.valueOf(localDateTimeInJapan);
             preparedStatement.setTimestamp(4, timestampInJapan);
-            return preparedStatement.executeUpdate();
+            System.out.println(preparedStatement.toString());
+            System.out.println(track.getBookId());
+            System.out.println(track.getUserId());
+            int insert_track_result = preparedStatement.executeUpdate();
+            if(track.getTrackStatus().equals("貸出")){
+                preparedStatement = connection.prepareStatement("SELECT * FROM track_tbl WHERE book_id = ? AND user_id = ? AND track_status = ? AND track_time = ?");
+                Due due = (Due)track;
+                preparedStatement.setInt(1, due.getBookId());
+                preparedStatement.setInt(2, due.getUserId());
+                preparedStatement.setString(3, due.getTrackStatus());
+                preparedStatement.setTimestamp(4, timestampInJapan);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                connection.commit();
+                while(resultSet.next()){
+                    preparedStatement = connection.prepareStatement("INSERT INTO due_tbl (track_id, borrow_date, return_due_date) VALUES (?, ?, ?)");
+                    preparedStatement.setInt(1, resultSet.getInt("track_id"));
+                    preparedStatement.setDate(2, new java.sql.Date((due.getBorrowDate()).getTime()));
+                    preparedStatement.setDate(3, new java.sql.Date((due.getReturnDueDate()).getTime()));
+                    preparedStatement.executeUpdate();
+                }
+            }else if(track.getTrackStatus().equals("予約")){
+                Reservation reservation = (Reservation)track;
+                preparedStatement = connection.prepareStatement("SELECT * FROM track_tbl WHERE book_id = ? AND user_id = ? AND track_status = ? AND track_time = ?");
+                preparedStatement.setInt(1, reservation.getBookId());
+                preparedStatement.setInt(2, reservation.getUserId());
+                preparedStatement.setString(3, reservation.getTrackStatus());
+                preparedStatement.setTimestamp(4, timestampInJapan);
+                
+                ResultSet resultSet = preparedStatement.executeQuery();
+                connection.commit();
+                while(resultSet.next()){
+                    preparedStatement = connection.prepareStatement("INSERT INTO reservation_tbl (track_id, reservation_start_date, reservation_end_date, is_active) VALUES (?, ?, ?, ?)");
+                    preparedStatement.setInt(1, resultSet.getInt("track_id"));
+                    preparedStatement.setDate(2, new java.sql.Date((reservation.getReservationStartDate()).getTime()));
+                    preparedStatement.setDate(3, new java.sql.Date((reservation.getReservationEndDate()).getTime()));
+                    preparedStatement.setBoolean(4, true);
+                    preparedStatement.executeUpdate();
+                }
+            }
+            return insert_track_result;
+
         } catch (SQLException e) {
             throw new RuntimeException("本情報登録時にエラーが発生しました", e);
         } finally {
@@ -498,6 +538,97 @@ public class TrackDao{
                 throw new RuntimeException("本情報検索時のステートメントの解放に失敗しました", e);
             }
         }
+    }
+    public Track selectByTrackId(int trackId){
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Track track = new Track();
+        try{
+            preparedStatement = connection.prepareStatement("SELECT * FROM track_tbl WHERE track_id = ?");
+            preparedStatement.setInt(1, trackId);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                if(resultSet.getString("track_status").equals("返却")||resultSet.getString("track_status").equals("予約取消")||resultSet.getString("track_status").equals("書籍登録")||resultSet.getString("track_status").equals("ユーザ情報更新")){
+                    track.setTrackId(resultSet.getInt("track_id"));
+                    track.setBookId(resultSet.getInt("book_id"));
+                    track.setUserId(resultSet.getInt("user_id"));
+                    track.setTrackStatus(resultSet.getString("track_status"));
+                    track.setTrackTime(resultSet.getDate("track_time"));
+                }else if(resultSet.getString("track_status").equals("貸出")){
+                    Due due = new Due();
+                    due.setTrackId(resultSet.getInt("track_id"));
+                    due.setBookId(resultSet.getInt("book_id"));
+                    due.setUserId(resultSet.getInt("user_id"));
+                    due.setTrackStatus(resultSet.getString("track_status"));
+                    due.setTrackTime(resultSet.getDate("track_time"));
+                    try{
+                        preparedStatement = connection.prepareStatement("SELECT * FROM due_tbl WHERE track_id = ?");
+                        preparedStatement.setInt(1, resultSet.getInt("track_id"));
+                        ResultSet resultSet2 = preparedStatement.executeQuery();
+                        while(resultSet2.next()){
+                            due.setBorrowDate(resultSet2.getDate("borrow_date"));
+                            due.setReturnDueDate(resultSet2.getDate("return_due_date"));
+                        }
+                    }catch(SQLException e){
+                        throw new RuntimeException("due_tblのSELECTに失敗しました", e);
+                    }finally{
+                        try{
+                            if (preparedStatement != null){
+                                preparedStatement.close();
+                            }
+                        }catch(SQLException e){
+                            throw new RuntimeException("本情報検索時のステートメントの解放に失敗しました", e);
+                        }
+                    }
+                    track = due;
+                }else if(resultSet.getString("track_status").equals("予約")){
+                    Reservation reservation = new Reservation();
+                    reservation.setTrackId(resultSet.getInt("track_id"));
+                    reservation.setBookId(resultSet.getInt("book_id"));
+                    reservation.setUserId(resultSet.getInt("user_id"));
+                    reservation.setTrackStatus(resultSet.getString("track_status"));
+                    reservation.setTrackTime(resultSet.getDate("track_time"));
+                    try{
+                        preparedStatement = connection.prepareStatement("SELECT * FROM reservation_tbl WHERE track_id = ?");
+                        preparedStatement.setInt(1, resultSet.getInt("track_id"));
+                        ResultSet resultSet2 = preparedStatement.executeQuery();
+                        while(resultSet2.next()){
+                            reservation.setReservationStartDate(resultSet2.getDate("reservation_start_date"));
+                            reservation.setReservationEndDate(resultSet2.getDate("reservation_end_date"));
+                            reservation.setIsActive(resultSet2.getBoolean("is_active"));
+                        }
+                    }catch(SQLException e){
+                        throw new RuntimeException("reservation_tblのSELECTに失敗しました", e);
+                    }finally{
+                        try{
+                            if (preparedStatement != null){
+                                preparedStatement.close();
+                            }
+                        }catch(SQLException e){
+                            throw new RuntimeException("本情報検索時のステートメントの解放に失敗しました", e);
+                        }
+                    }
+                    track = reservation;
+                }
+            }
+            return track;
+        }catch(SQLException e){
+            throw new RuntimeException("track_tblのSELECTに失敗しました", e);
+        }finally{
+            try{
+                if (preparedStatement != null){
+                    preparedStatement.close();
+                }
+                if (resultSet != null){
+                    resultSet.close();
+                }
+            }catch(SQLException e){
+                throw new RuntimeException("本情報検索時のステートメントの解放に失敗しました", e);
+            }
+        }
+            
+
+
     }
 
 

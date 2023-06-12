@@ -9,50 +9,24 @@
 <meta charset="UTF-8">
 <title>Book Details</title>
 <%@ include file="head.jsp" %>
-
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet" type="text/css" href="bootstrap-datepicker-1.9.0-dist/css/bootstrap-datepicker.min.css">
 <script type="text/javascript" src="bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="bootstrap-datepicker-1.9.0-dist/locales/bootstrap-datepicker.ja.min.js"></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 <script>
     var trackList = [
-        <%
-            ArrayList<Track> trackList = (ArrayList<Track>)request.getAttribute("trackList");
-            Book book1 = (Book)request.getAttribute("book");
-            for(Track track : trackList){
-        %>
+        <c:forEach var="trackData" items="${trackDataList}">
             {
-                title: "<%=track.getTrackStatus() %>",
-                start: "<%=track.getTrackTime() %>",
-                color: <% if(track.getTrackStatus().equals("書籍登録")){ %>
-                    "blue"
-                <% }else if(track.getTrackStatus().equals("貸出")){ %>
-                    "green"
-                <% } else if(track.getTrackStatus().equals("予約")){ %>
-                        "yellow"
-                <% } %>,
-                <% if(track.getTrackStatus().equals("貸出")){ 
-                    Due due = (Due)track;
-                %>
-                end: "<%=due.getReturnDueDate() %>",
-                <% } %>
-                <% if(track.getTrackStatus().equals("予約")){ 
-                    Reservation reservation = (Reservation)track;
-                    %>
-                end: "<%=reservation.getReservationEndDate() %>",
-                <% } %>
-                <% if(track.getTrackStatus().equals("予約")){ 
-                    Reservation reservation = (Reservation)track;
-                    %>
-                    textColor: "black",
-                <% } %>
+                title: "${trackData.title}",
+                start: "${trackData.start}",
+                color: "${trackData.color}",
+                end: "${trackData.end}",
+                textColor: "${trackData.textColor}",
+                url: "${trackData.url}",
             },
-        <%
-            }
-        %>
-
+        </c:forEach>
     ];
-    
 </script>
 
 <script src="js/detail_book_calendar.js"></script>
@@ -109,22 +83,22 @@
     <div class="mt-4">
         <a href="AccessLibraryData" class="btn btn-primary">書籍一覧に戻る</a>
         <!-- <a href="#" class="btn btn-warning" id="reservationButton">予約</a> -->
-        <button id="reservationButton" class="btn btn-warning">予約</button>
+        <!-- <button id="reservationButton" class="btn btn-warning">予約</button>
         <a href="lend.jsp?bookId=<%= book.getBookId() %>" class="btn btn-success">貸出</a>
-        <a href="return.jsp?bookId=<%= book.getBookId() %>" class="btn btn-info">返却</a>
+        <a href="return.jsp?bookId=<%= book.getBookId() %>" class="btn btn-info">返却</a> -->
     </div>
     
-
+<!-- 
 <div class="input-daterange input-group">
     <input type="text" class="input-sm form-control" name="start" placeholder="貸出開始日"/>
     <span class="input-group-addon">to</span>
     <input type="text" class="input-sm form-control" name="end" placeholder="返却予定日"/>
-</div>
+</div> -->
 
 </body>
 </html>
 
-<script>
+<!-- <script>
     var invalidDate = new Date('2023-06-21');
     $('.input-daterange').datepicker({
         todayBtn: "linked",
@@ -152,4 +126,4 @@
             }
         }
     });
-</script>
+</script> -->

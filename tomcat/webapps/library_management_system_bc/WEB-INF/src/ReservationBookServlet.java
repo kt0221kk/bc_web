@@ -6,11 +6,14 @@ import javax.servlet.annotation.WebServlet;
 import java.sql.*;
 import library_management_class.*;
 import java.util.*;
-import java.text.SimpleDateFormat;
+import java.text.*;
+import library_management_class.*;
 
-@WebServlet("/DetailBook")
-public class DetailBookServlet extends HttpServlet {
-    public DetailBookServlet(){
+
+
+@WebServlet("/ReservationBook")
+public class ReservationBookServlet extends HttpServlet {
+    public ReservationBookServlet(){
         super();
     }   
 
@@ -33,21 +36,23 @@ public class DetailBookServlet extends HttpServlet {
                     return;
                 }
             }
+
             ConnectionManager connectionManager = new ConnectionManager();
             Connection connection = connectionManager.getConnection();
-            OperateBook operateBook = new OperateBook(connection);
             BookDao bookDao = new BookDao(connection);
             int bookId = Integer.parseInt(request.getParameter("book_id"));
             Book book = bookDao.selectById(bookId);
+            request.setAttribute("book", book);
             TrackDao trackDao = new TrackDao(connection);
             ArrayList<Track> trackList = trackDao.selectByBookId(bookId);
             request.setAttribute("trackList", trackList);
-            request.setAttribute("book", book);
-        
             ArrayList<Map<String, Object>> trackDataList = new ArrayList<>();
             //全てのイベントを含む日付のリスト
             List<String> occupiedDates = new ArrayList<>();
+            List<String> disabledDateList = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
+
 
             for(Track track : trackList){
                 Map<String, Object> trackData = new HashMap<>();
@@ -82,6 +87,7 @@ public class DetailBookServlet extends HttpServlet {
                             endCal.setTime(end);
                             for (java.util.Date date = startCal.getTime(); !startCal.after(endCal); startCal.add(Calendar.DATE, 1), date = startCal.getTime()) {
                                 occupiedDates.add(sdf.format(date));
+                                disabledDateList.add(sdf2.format(date));
                             }
                             url = "/library_management_system_bc/DetailTrack?track_id=" + track.getTrackId()+"&book_id="+bookId;
                         }else{
@@ -100,6 +106,8 @@ public class DetailBookServlet extends HttpServlet {
                             endCal.setTime(end);
                             for (java.util.Date date = startCal.getTime(); !startCal.after(endCal); startCal.add(Calendar.DATE, 1), date = startCal.getTime()) {
                                 occupiedDates.add(sdf.format(date));
+                                disabledDateList.add(sdf2.format(date));
+
                             }
                             url = "/library_management_system_bc/DetailTrack?track_id=" + track.getTrackId()+"&book_id="+bookId;
                             break;
@@ -109,15 +117,6 @@ public class DetailBookServlet extends HttpServlet {
                         }
                         
                 }
-                // イベントを含む日付をリストに追加
-                // Calendar startCal = Calendar.getInstance();
-                // startCal.setTime(start);
-                // Calendar endCal = Calendar.getInstance();
-                // endCal.setTime(end);
-                // for (java.util.Date date = startCal.getTime(); !startCal.after(endCal); startCal.add(Calendar.DATE, 1), date = startCal.getTime()) {
-                //     occupiedDates.add(sdf.format(date));
-                // }
-
                 trackData.put("start", sdf.format(start));
                 trackData.put("color", color);
                 trackData.put("textColor", textColor);
@@ -159,16 +158,115 @@ public class DetailBookServlet extends HttpServlet {
                     } else {
                         trackData.put("textColor", "black");
                     }
-                    // trackData.put("url", "/library_management_system_bc/ReservationBook?book_id=" + bookId+"&start_date="+date);
-                    trackData.put("url", "/library_management_system_bc/ReservationBook?book_id=" + bookId);
+                    trackData.put("url", "/library_management_system_bc/ReservationBook");
                     trackDataList.add(trackData);
                 }
                 cal.add(Calendar.DATE, 1);
             }
-
             request.setAttribute("trackDataList", trackDataList);
-            RequestDispatcher dispatch = request.getRequestDispatcher("WEB-INF/jsp/detail_book.jsp");
+            request.setAttribute("occupiedDates", occupiedDates);
+            request.setAttribute("disabledDateList", disabledDateList);
+            RequestDispatcher dispatch = request.getRequestDispatcher("WEB-INF/jsp/reservation_book.jsp");
             dispatch.forward(request, response);
-        }
+
+    }
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        HttpSession session = request.getSession(false);
+            String target = request.getRequestURI();
+            response.setContentType("text/html; charset=UTF-8");
+
+            request.setCharacterEncoding("UTF-8");
+
+            if (session == null){
+                /* まだ認証されていない */
+                session = request.getSession(true);
+                session.setAttribute("target", target);
+                response.sendRedirect("/library_management_system_bc/login.jsp");
+                return;
+            }else{
+                Object loginCheck = session.getAttribute("login");
+                if (loginCheck == null){
+                    /* まだ認証されていない */
+                    session.setAttribute("target", target);
+                    response.sendRedirect("/library_management_system_bc/login.jsp");
+                    return;
+                }
+            }
+            Track track= new Track();
+
+            String book_status = request.getParameter("book_status");
+            int bookId = Integer.parseInt(request.getParameter("book_id"));
+            int userId = Integer.parseInt(request.getParameter("user_id"));
+            String reservationStartDate = request.getParameter("start");
+            String reservationEndDate = request.getParameter("end");
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            ConnectionManager connectionManager = new ConnectionManager();
+            Connection connection = connectionManager.getConnection();
+            int insert_result =0;
+            TrackDao trackDao = new TrackDao(connection);
+            // 予約が完了したら、予約した本の詳細画面に遷移する
+            BookDao bookDao = new BookDao(connection);
+            Book book = bookDao.selectById(bookId);
+
+            if(book_status.equals("貸出")){
+                Due due = new Due();
+                due.setTrackStatus("貸出");
+                due.setBookId(bookId);
+                due.setUserId(userId);
+                try{
+                    due.setBorrowDate(sdf.parse(reservationStartDate));
+                    due.setReturnDueDate(sdf.parse(reservationEndDate));
+
+                }catch(ParseException e){
+                    e.printStackTrace();
+                }
+                insert_result = trackDao.insert(due);
+                connectionManager.commit();
+                book.setStatus("貸出中");
+                
+            }else if(book_status.equals("予約")){
+                Reservation reservation = new Reservation();
+                reservation.setTrackStatus("予約");
+                reservation.setBookId(bookId);
+                reservation.setUserId(userId);
+                try{
+                    reservation.setReservationStartDate(sdf.parse(reservationStartDate));
+                reservation.setReservationEndDate(sdf.parse(reservationEndDate));
+                }catch(ParseException e){
+                    e.printStackTrace();
+                }
+                insert_result = trackDao.insert(reservation);
+                connectionManager.commit();
+            }
+            // TrackDao trackDao = new TrackDao(connection);
+            // int insert_result = trackDao.insert(track);
+            connectionManager.commit();
+            if(insert_result == 1){
+                request.setAttribute("message", "予約が完了しました。");
+            }else{
+                request.setAttribute("message", "予約に失敗しました。");
+            }
+
+            
+            bookDao.update(book);
+            connectionManager.commit();
+            UserDao userDao = new UserDao(connection);
+            User user = userDao.find(userId);
+            connectionManager.closeConnection();
+            request.setAttribute("book", book);
+            request.setAttribute("book_status", book_status);
+            request.setAttribute("track", track);
+            request.setAttribute("track", track);
+            request.setAttribute("user_id", userId);
+            request.setAttribute("insert_result", insert_result);
+            request.setAttribute("start", request.getParameter("start"));
+            request.setAttribute("end", request.getParameter("end"));
+            request.setAttribute("user", user);
+            // AccessLibraryDataにリダイレクト
+
+            RequestDispatcher dispatch = request.getRequestDispatcher("WEB-INF/jsp/reservation_book_post.jsp");
+            dispatch.forward(request, response);
+
+    }
+
 }
- 

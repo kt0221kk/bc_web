@@ -3,7 +3,7 @@ CREATE TABLE book_tbl (
   title VARCHAR(255),
   author VARCHAR(255),
   genre VARCHAR(255),
-  status VARCHAR(255) CHECK (status IN ('貸出可能', '貸出中','閲覧のみ可能','その他')),
+  status VARCHAR(255) CHECK (status IN ('貸出可能', '貸出中','予約中','閲覧のみ可能','その他')),
   publication_year INTEGER,
   ISBN VARCHAR(255),
   publisher VARCHAR(255),
@@ -36,16 +36,16 @@ CREATE TABLE reservation_tbl (
   track_id INTEGER PRIMARY KEY REFERENCES track_tbl(track_id),
   reservation_start_date DATE,
   reservation_end_date DATE,
-  is_active BOOLEAN
+  is_active BOOLEAN DEFAULT true
 );
 
 -- ダミーデータの挿入
 -- Insert into book_tbl
 INSERT INTO book_tbl(title, author, genre, status, publication_year, isbn, publisher) 
-VALUES ('The Great Book', 'John Doe', 'Fiction', '貸出可能', 2022, '123-456789-0', 'Big Publisher');
+VALUES ('The Great Book', 'John Doe', 'Fiction', '貸出中', 2022, '123-456789-0', 'Big Publisher');
 
 INSERT INTO book_tbl(title, author, genre, status, publication_year, isbn, publisher) 
-VALUES ('Another Great Book', 'Jane Doe', 'Non-Fiction', '貸出中', 2021, '123-456789-1', 'Another Big Publisher');
+VALUES ('Another Great Book', 'Jane Doe', 'Non-Fiction', '予約中', 2021, '123-456789-1', 'Another Big Publisher');
 
 -- Insert into user_tbl
 INSERT INTO user_tbl(password, user_name, address)

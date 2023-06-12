@@ -8,9 +8,9 @@ import library_management_class.*;
 import java.util.*;
 import java.text.SimpleDateFormat;
 
-@WebServlet("/DetailBook")
-public class DetailBookServlet extends HttpServlet {
-    public DetailBookServlet(){
+@WebServlet("/DetailTrack")
+public class DetailTrackServlet extends HttpServlet {
+    public DetailTrackServlet(){
         super();
     }   
 
@@ -35,19 +35,25 @@ public class DetailBookServlet extends HttpServlet {
             }
             ConnectionManager connectionManager = new ConnectionManager();
             Connection connection = connectionManager.getConnection();
-            OperateBook operateBook = new OperateBook(connection);
+            TrackDao trackDao = new TrackDao(connection);
+            int trackId = Integer.parseInt(request.getParameter("track_id"));
+            Track my_track = trackDao.selectByTrackId(trackId);
+            request.setAttribute("track", my_track);
+            UserDao userDao = new UserDao(connection);
+            User user = userDao.find(my_track.getUserId());
+            request.setAttribute("user", user);
+            
             BookDao bookDao = new BookDao(connection);
             int bookId = Integer.parseInt(request.getParameter("book_id"));
             Book book = bookDao.selectById(bookId);
-            TrackDao trackDao = new TrackDao(connection);
             ArrayList<Track> trackList = trackDao.selectByBookId(bookId);
-            request.setAttribute("trackList", trackList);
             request.setAttribute("book", book);
-        
             ArrayList<Map<String, Object>> trackDataList = new ArrayList<>();
             //全てのイベントを含む日付のリスト
             List<String> occupiedDates = new ArrayList<>();
+            List<String> disabledDateList = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
 
             for(Track track : trackList){
                 Map<String, Object> trackData = new HashMap<>();
@@ -55,12 +61,11 @@ public class DetailBookServlet extends HttpServlet {
                 // trackData.put("start", track.getTrackTime());
                 String color = "";
                 String textColor = "";
-                String url = "";
                 java.util.Date start=null;
                 java.util.Date end=null;
                 Calendar startCal = Calendar.getInstance();
                 Calendar endCal = Calendar.getInstance();
-
+                String url = "";
                 switch (track.getTrackStatus()) {
                     case "書籍登録":
                         start = track.getTrackTime();
@@ -82,8 +87,10 @@ public class DetailBookServlet extends HttpServlet {
                             endCal.setTime(end);
                             for (java.util.Date date = startCal.getTime(); !startCal.after(endCal); startCal.add(Calendar.DATE, 1), date = startCal.getTime()) {
                                 occupiedDates.add(sdf.format(date));
+                                disabledDateList.add(sdf2.format(date));
                             }
                             url = "/library_management_system_bc/DetailTrack?track_id=" + track.getTrackId()+"&book_id="+bookId;
+
                         }else{
                             // 次のfor文のループに入る
                             continue;
@@ -100,6 +107,7 @@ public class DetailBookServlet extends HttpServlet {
                             endCal.setTime(end);
                             for (java.util.Date date = startCal.getTime(); !startCal.after(endCal); startCal.add(Calendar.DATE, 1), date = startCal.getTime()) {
                                 occupiedDates.add(sdf.format(date));
+                                disabledDateList.add(sdf2.format(date));
                             }
                             url = "/library_management_system_bc/DetailTrack?track_id=" + track.getTrackId()+"&book_id="+bookId;
                             break;
@@ -107,7 +115,6 @@ public class DetailBookServlet extends HttpServlet {
                             // 次のfor文のループに入る
                             continue;
                         }
-                        
                 }
                 // イベントを含む日付をリストに追加
                 // Calendar startCal = Calendar.getInstance();
@@ -121,7 +128,6 @@ public class DetailBookServlet extends HttpServlet {
                 trackData.put("start", sdf.format(start));
                 trackData.put("color", color);
                 trackData.put("textColor", textColor);
-                trackData.put("url", url);
 
                 endCal.add(Calendar.DATE, 1);
                 String formattedEndDate = sdf.format(endCal.getTime());
@@ -130,19 +136,13 @@ public class DetailBookServlet extends HttpServlet {
                 trackDataList.add(trackData);
             }
             // 今日から30日後までの日付について、それがoccupiedDatesに含まれていない場合は新しいイベントを作成
-            TimeZone tz = TimeZone.getTimeZone("Asia/Tokyo");
-            TimeZone.setDefault(TimeZone.getTimeZone("Asia/Tokyo"));
-            Calendar cal = Calendar.getInstance(tz);
-            sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar cal = Calendar.getInstance();
             for (int i = 0; i < 60; i++) {
                 String date = sdf.format(cal.getTime());
                 if (!occupiedDates.contains(date)) {
                     Map<String, Object> trackData = new HashMap<>();
                     if (i == 0) {
                         trackData.put("title", "貸出可能");
-                        // trackData.put("title", date);
-                        sdf = new SimpleDateFormat("yyyy-MM-dd");
-
                     } else {
                         trackData.put("title", "予約可能");
                     }
@@ -159,16 +159,17 @@ public class DetailBookServlet extends HttpServlet {
                     } else {
                         trackData.put("textColor", "black");
                     }
-                    // trackData.put("url", "/library_management_system_bc/ReservationBook?book_id=" + bookId+"&start_date="+date);
-                    trackData.put("url", "/library_management_system_bc/ReservationBook?book_id=" + bookId);
+                    trackData.put("url", "/library_management_system_bc/AccessLibraryData?book_id=" + bookId+"&start_date="+date);
                     trackDataList.add(trackData);
                 }
                 cal.add(Calendar.DATE, 1);
             }
+            
+            request.setAttribute("occupiedDates", occupiedDates);
+            request.setAttribute("disabledDateList", disabledDateList);
 
             request.setAttribute("trackDataList", trackDataList);
-            RequestDispatcher dispatch = request.getRequestDispatcher("WEB-INF/jsp/detail_book.jsp");
-            dispatch.forward(request, response);
-        }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/detail_track.jsp");
+            dispatcher.forward(request, response);
+    }
 }
- 
