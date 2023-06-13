@@ -17,7 +17,6 @@ CREATE TABLE user_tbl (
   user_name VARCHAR(255),
   address VARCHAR(255)
 );
-
 CREATE TABLE track_tbl (
   track_id SERIAL PRIMARY KEY,
   book_id INTEGER REFERENCES book_tbl(book_id),

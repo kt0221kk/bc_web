@@ -42,7 +42,7 @@
                         <%
                     } else {
                 %>
-                    <a class="nav-link active" href="login.jsp" >ログイン</a>
+                    <a class="nav-link active" href="login" >ログイン</a>
                 <%
                     }
                 }

@@ -26,14 +26,14 @@ public class PlotBookDataServlet extends HttpServlet {
                 /* まだ認証されていない */
                 session = request.getSession(true);
                 session.setAttribute("target", target);
-                response.sendRedirect("/library_management_system_bc/login.jsp");
+                response.sendRedirect("/library_management_system_bc/login");
                 return;
             }else{
                 Object loginCheck = session.getAttribute("login");
                 if (loginCheck == null){
                     /* まだ認証されていない */
                     session.setAttribute("target", target);
-                    response.sendRedirect("/library_management_system_bc/login.jsp");
+                    response.sendRedirect("/library_management_system_bc/login");
                     return;
                 }
             }
