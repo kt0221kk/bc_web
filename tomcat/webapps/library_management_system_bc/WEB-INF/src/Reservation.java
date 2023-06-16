@@ -34,4 +34,12 @@ public class Reservation extends Track {
         this.isActive = isActive;
     }
 
+    public void setReservation(Track track) {
+        this.setTrackId(track.getTrackId());
+        this.setUserId(track.getUserId());
+        this.setBookId(track.getBookId());
+        this.setTrackStatus(track.getTrackStatus());
+        this.setTrackTime(track.getTrackTime());
+    }
+
 }

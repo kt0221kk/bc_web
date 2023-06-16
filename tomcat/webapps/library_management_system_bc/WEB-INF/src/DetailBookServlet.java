@@ -22,14 +22,14 @@ public class DetailBookServlet extends HttpServlet {
                 /* まだ認証されていない */
                 session = request.getSession(true);
                 session.setAttribute("target", target);
-                response.sendRedirect("/library_management_system_bc/login.jsp");
+                response.sendRedirect("/library_management_system_bc/login");
                 return;
             }else{
                 Object loginCheck = session.getAttribute("login");
                 if (loginCheck == null){
                     /* まだ認証されていない */
                     session.setAttribute("target", target);
-                    response.sendRedirect("/library_management_system_bc/login.jsp");
+                    response.sendRedirect("/library_management_system_bc/login");
                     return;
                 }
             }
@@ -39,8 +39,10 @@ public class DetailBookServlet extends HttpServlet {
             BookDao bookDao = new BookDao(connection);
             int bookId = Integer.parseInt(request.getParameter("book_id"));
             Book book = bookDao.selectById(bookId);
-            TrackDao trackDao = new TrackDao(connection);
-            ArrayList<Track> trackList = trackDao.selectByBookId(bookId);
+            TrackService trackService = new TrackService();
+            ArrayList<Track> trackList = trackService.getTrackListByBookId(bookId);
+            // TrackDao trackDao = new TrackDao(connection);
+            // ArrayList<Track> trackList = trackDao.selectByBookId(bookId);
             request.setAttribute("trackList", trackList);
             request.setAttribute("book", book);
         
@@ -75,6 +77,7 @@ public class DetailBookServlet extends HttpServlet {
                             color = "red";
                             Due due = (Due)track;
                             start = due.getBorrowDate();
+                            System.out.println(start);
                             //一日追加
                             end= due.getReturnDueDate();
                             textColor = "white";

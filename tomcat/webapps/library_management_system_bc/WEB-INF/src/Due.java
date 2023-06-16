@@ -6,7 +6,6 @@ public class Due extends Track {
 
     private Date borrowDate;
     private Date returnDueDate;
-
     // getters
 
     public Date getBorrowDate() {
@@ -25,6 +24,13 @@ public class Due extends Track {
 
     public void setReturnDueDate(Date returnDueDate) {
         this.returnDueDate = returnDueDate;
+    }
+    public void setDue(Track track){
+        this.setTrackId(track.getTrackId());
+        this.setUserId(track.getUserId());
+        this.setBookId(track.getBookId());
+        this.setTrackStatus(track.getTrackStatus());
+        this.setTrackTime(track.getTrackTime());
     }
 
 }

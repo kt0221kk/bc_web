@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS reservation_tbl CASCADE;
+DROP TABLE IF EXISTS due_tbl CASCADE;
+DROP TABLE IF EXISTS track_tbl CASCADE;
+DROP TABLE IF EXISTS user_tbl CASCADE;
+DROP TABLE IF EXISTS book_tbl CASCADE;
 CREATE TABLE book_tbl (
   book_id SERIAL PRIMARY KEY,
   title VARCHAR(255),
@@ -21,7 +26,7 @@ CREATE TABLE track_tbl (
   track_id SERIAL PRIMARY KEY,
   book_id INTEGER REFERENCES book_tbl(book_id),
   user_id INTEGER REFERENCES user_tbl(user_id),
-  track_time TIMESTAMP,
+  track_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   track_status VARCHAR(255) CHECK (track_status IN ('貸出', '返却', '予約', '予約取消','書籍登録','ユーザ情報更新'))
 );
 
@@ -37,6 +42,10 @@ CREATE TABLE reservation_tbl (
   reservation_end_date DATE,
   is_active BOOLEAN DEFAULT true
 );
+
+CREATE UNIQUE INDEX idx_unique_reservations
+ON reservation_tbl (reservation_start_date, reservation_end_date)
+WHERE is_active = true;
 
 -- ダミーデータの挿入
 -- Insert into book_tbl
