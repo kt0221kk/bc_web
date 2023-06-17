@@ -22,30 +22,18 @@ public class PlotBookDataServlet extends HttpServlet {
         throws ServletException, IOException {
             HttpSession session = request.getSession(false);
             String target = request.getRequestURI();
-            if (session == null){
-                /* まだ認証されていない */
-                session = request.getSession(true);
-                session.setAttribute("target", target);
-                response.sendRedirect("/library_management_system_bc/login");
+            LoginService loginService = new LoginService();
+            if(!loginService.loginCheck(request, response)){
                 return;
-            }else{
-                Object loginCheck = session.getAttribute("login");
-                if (loginCheck == null){
-                    /* まだ認証されていない */
-                    session.setAttribute("target", target);
-                    response.sendRedirect("/library_management_system_bc/login");
-                    return;
-                }
             }
+
             // Setting the book name
             ConnectionManager connectionManager = new ConnectionManager();
             Connection connection = connectionManager.getConnection();
             OperateBook operateBook = new OperateBook(connection);
             ArrayList<Book> bookList = operateBook.searchAllBooks();
             request.setAttribute("bookList", bookList);
-            // Forwarding the request to "plot_book_data.jsp"
             RequestDispatcher dispatch = request.getRequestDispatcher("WEB-INF/jsp/plot_book_data.jsp");
             dispatch.forward(request, response);
-            System.out.println("AccessLibraryData.java: doGet()");
         }
 }

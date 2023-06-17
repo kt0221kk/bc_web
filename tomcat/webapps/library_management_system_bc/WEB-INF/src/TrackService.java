@@ -5,6 +5,7 @@ import library_management_class.Track;
 import library_management_class.Due;
 import library_management_class.Reservation;
 import library_management_class.TrackDao;
+import library_management_class.Track;
 import java.util.ArrayList;
 public class TrackService{
 
@@ -65,6 +66,28 @@ public class TrackService{
      }
         cm.closeConnection();
         return polymorphicTrackList;
+    }
+    public Track getTrackByTrackId(int trackId){
+        Track track = new Track();
+        ConnectionManager cm = new ConnectionManager();
+        Connection con = cm.getConnection();
+        TrackDao trackDao = new TrackDao(con);
+        track = trackDao.selectByTrackId(trackId);
+        if(track.getTrackStatus().equals("貸出")){
+            Due due = new Due();
+            DueDao dueDao = new DueDao(con);
+            due = dueDao.selectByTrackId(track.getTrackId());
+            due.setDue(track);
+            track = due;
+        } else if(track.getTrackStatus().equals("予約")){
+            Reservation reservation = new Reservation();
+            ReservationDao reservationDao = new ReservationDao(con);
+            reservation = reservationDao.selectByTrackId(track.getTrackId());
+            reservation.setReservation(track);
+            track = reservation;
+        }
+        cm.closeConnection();
+        return track;
     }
 
 }
