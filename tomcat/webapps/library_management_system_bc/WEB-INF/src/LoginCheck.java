@@ -52,8 +52,10 @@ public class LoginCheck extends HttpServlet {
     Connection connection = connectionManager.getConnection();
     UserDao userDao = new UserDao(connection);
     ArrayList<User> userList = userDao.selectByUserName(user);
+    LoginService loginService = new LoginService();
+    String hashPassword = loginService.hashPassword(pass);
     for (User u : userList){
-        if (u.getPassword().equals(pass)){
+        if (u.getPassword().equals(hashPassword)){
             session.setAttribute("user_id", u.getUserId());
             return true;
         }
