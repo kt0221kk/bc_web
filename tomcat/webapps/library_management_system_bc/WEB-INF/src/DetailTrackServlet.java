@@ -52,18 +52,6 @@ public class DetailTrackServlet extends HttpServlet {
 
             Book book = bookDao.selectById(bookId);
             request.setAttribute("book", book);
-            ArrayList<Track> trackList = trackService.getTrackListByBookId(bookId);
-
-            //全てのイベントを含む日付のリスト78
-            LibraryCalendarDataFormatter libraryCalendarDataFormatter = new LibraryCalendarDataFormatter();
-            List<String> occupiedDates = libraryCalendarDataFormatter.makeOccupiedDatesList(trackList);
-            List<String> disabledDateList = libraryCalendarDataFormatter.makeDisabledDateList(trackList);
-            ArrayList<Map<String, Object>> trackDataList = libraryCalendarDataFormatter.makeTrackDataList(trackList);
-            
-            request.setAttribute("occupiedDates", occupiedDates);
-            request.setAttribute("disabledDateList", disabledDateList);
-
-            request.setAttribute("trackDataList", trackDataList);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/detail_track.jsp");
             dispatcher.forward(request, response);
     }

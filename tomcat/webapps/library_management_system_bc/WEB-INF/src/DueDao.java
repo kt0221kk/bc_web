@@ -34,7 +34,7 @@ public class DueDao{
     public int insert(Due due){
         int result = 0;
         try{
-            String sql = "INSERT INTO due_tbl (track_id,borrow_date, return_due_date) VALUES (?. ?, ?)";
+            String sql = "INSERT INTO due_tbl (track_id,borrow_date, return_due_date) VALUES (?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, due.getTrackId());
             stmt.setDate(2, new java.sql.Date((due.getBorrowDate()).getTime()));
@@ -63,4 +63,6 @@ public class DueDao{
         }
         return due;
     }
+
+    
 }

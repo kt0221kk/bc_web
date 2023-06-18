@@ -43,6 +43,12 @@
         </tbody>
         <tbody>
             <tr>
+                <th>手続きID</th>
+                <td><c:out value="${track.getTrackId()}"></c:out></td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
                 <th>ユーザー名</th>
                 <td><c:out value="${user.getUserName()}"></c:out></td>
             </tr>

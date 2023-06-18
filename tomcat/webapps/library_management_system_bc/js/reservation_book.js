@@ -10,6 +10,8 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         // daysOfWeekHighlighted: "1,5",
         datesDisabled:disabledDateList,
         toggleActive: true,
+        clearBtn: true,
+        todayBtn: false,
         endDate: '+2m',
         startDate: '+0d',
     }).on('changeDate', function (e) {
@@ -23,8 +25,10 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         // 開始日が今日であれば "貸出"、それ以降であれば "予約" とする
         if (moment(startDate2).isSameOrBefore(today)) {
             document.getElementById('book_status').value = '貸出';
+            document.getElementById('post_address').action = 'LendingBook';
         } else if (moment(startDate2).isAfter(today)) {
             document.getElementById('book_status').value = '予約';
+            document.getElementById('post_address').action = 'ReservationBook';
         }
         if (startDate && endDate) {
             // Convert selected dates to Date objects
@@ -65,7 +69,10 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             
         }
 
-    });
+    }).on('clearDate', function (e) {
+        // カレンダーから全てのイベントを削除
+        $('.input-daterange').datepicker('clearDates');
+    });;
 
 document.addEventListener('DOMContentLoaded', function() {
     

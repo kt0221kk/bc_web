@@ -42,6 +42,18 @@ public class ReservationDao{
         }
         return result;
     }
+    public int updateIsActiveFalse(int trackId){
+        int result = 0;
+        try{
+            String sql = "UPDATE due_tbl SET is_active = false WHERE track_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, trackId);
+            result = stmt.executeUpdate();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
     public Reservation selectByTrackId(int trackId){
         Reservation reservation = new Reservation();
         try{

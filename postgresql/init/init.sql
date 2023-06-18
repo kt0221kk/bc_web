@@ -49,11 +49,8 @@ WHERE is_active = true;
 
 -- ダミーデータの挿入
 -- Insert into book_tbl
-INSERT INTO book_tbl(title, author, genre, status, publication_year, isbn, publisher) 
-VALUES ('The Great Book', 'John Doe', 'Fiction', '貸出中', 2022, '123-456789-0', 'Big Publisher');
-
-INSERT INTO book_tbl(title, author, genre, status, publication_year, isbn, publisher) 
-VALUES ('Another Great Book', 'Jane Doe', 'Non-Fiction', '予約中', 2021, '123-456789-1', 'Another Big Publisher');
+-- INSERT INTO book_tbl(title, author, genre, status, publication_year, isbn, publisher) 
+-- VALUES ('The Great Book', 'John Doe', 'Fiction', '貸出中', 2022, '123-456789-0', 'Big Publisher');
 
 -- Insert into user_tbl
 INSERT INTO user_tbl(password, user_name, address)

@@ -48,18 +48,20 @@
     <h1 class="mb-4">書籍の貸出または予約
     </h1>
     <jsp:useBean id="book" type="library_management_class.Book" scope="request" />
-    <form action="ReservationBook" method="post">
+    <form action="ReservationBook" method="post" id="post_address">
     <table class="table table-striped">
         <tbody>
             <tr>
                 <th>書籍ID</th>
                 <td><%= book.getBookId() %></td>
+                <input type="hidden" name="book_id" value="<%= book.getBookId() %>">
             </tr>
         </tbody>
         <tbody>
             <tr>
                 <th>書籍名</th>
                 <td><%= book.getTitle() %></td>
+                <input type="hidden" name="title" value="<%= book.getTitle() %>">
             </tr>
         </tbody>
         
@@ -68,9 +70,9 @@
                 <th>書籍貸出期間
                 </th>
                 <td><div class="input-daterange input-group">
-                    <input type="text" class="input-sm form-control" id="start_date" name="start" placeholder="貸出開始日"required/>
+                    <input type="text" class="input-sm form-control" id="start_date" name="start" hidden/>
                     <span class="input-group-addon"></span>
-                    <input type="text" id="end_date" class="input-sm form-control" name="end" placeholder="返却予定日" required/>
+                    <input type="text" id="end_date" class="input-sm form-control" placeholder="貸出期間選択" name="end"required/>
                 </div></td>
             </tr>
         </tbody>

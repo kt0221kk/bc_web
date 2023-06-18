@@ -18,10 +18,10 @@ public class TrackDao{
     }
     public int insert(Track track){
         PreparedStatement stmt = null;
-        int result = 0;
+        int track_id = -1;
         try{
             String sql = "INSERT INTO track_tbl (book_id, user_id, track_status, track_time) VALUES (?, ?, ?, ?)";
-            stmt = connection.prepareStatement(sql);
+            stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, track.getBookId());
             stmt.setInt(2, track.getUserId());
             stmt.setString(3, track.getTrackStatus());
@@ -31,7 +31,14 @@ public class TrackDao{
             // LocalDateTimeをTimestampに変換
             Timestamp timestampInJapan = Timestamp.valueOf(localDateTimeInJapan);
             stmt.setTimestamp(4, timestampInJapan);
-            result = stmt.executeUpdate();
+            // result = stmt.executeUpdate();
+            // System.out.println("INSERT文: " + stmt.toString());
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            if(rs.next()){
+                track_id = rs.getInt(1);
+                System.out.println("getGeneratedKeys: " + track_id);
+            }
         }catch(SQLException e){
             e.printStackTrace();
         }finally{
@@ -43,7 +50,7 @@ public class TrackDao{
                 throw new RuntimeException("ステートメントの解放に失敗しました。", e);
             }
         }
-        return result;
+        return track_id;
     }
 
     public Track selectByTrackId(int trackId){
@@ -134,4 +141,5 @@ public class TrackDao{
         }
         return trackList;
     }
+
 }

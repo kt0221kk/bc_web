@@ -9,6 +9,7 @@ pageEncoding="UTF-8" %>
     
     <link rel="stylesheet" href="css/plot_book_data.css" />
     <%@ page import="java.util.ArrayList, library_management_class.Book" %>
+    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
     <script>
       $(document).ready(function(){
         $(".badge").hover(function(){
@@ -25,6 +26,14 @@ pageEncoding="UTF-8" %>
     <%@ include file="header.jsp" %>
 
     <h1>書籍情報</h1>
+    <div class="container">
+      <form action="PlotBookData" method="get">
+          <input type="text" name="search" placeholder="書籍名で検索..">
+          <input type="text" name="page" value="1" hidden>
+          <input type="submit" value="検索">
+      </form>
+    </div>
+
     <!-- 書籍情報のテーブル -->
     <table class="table table-striped">
       <thead>
@@ -55,7 +64,7 @@ pageEncoding="UTF-8" %>
               
               <a href="<%= action_url %>" style="text-decoration: none;">
                 <span class="badge bg-success">
-                    貸出可能
+                    書籍在り
                 </span>
               </a>
             <% } else { %>
@@ -77,5 +86,14 @@ pageEncoding="UTF-8" %>
           }
         %>
       </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <c:forEach var="i" items="${pageNumbers}">
+          <li class="page-item"><a class="page-link" href="PlotBookData?page=${i}">${i}</a></li>
+        </c:forEach>
+      </ul>
+    </nav>
+    
   </body>
 </html>
