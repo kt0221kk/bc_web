@@ -66,6 +66,8 @@ pageEncoding="UTF-8"%>
           </a>
         </div>
         <div class="col-lg-6">
+          <a href="UserFind" class="no-link-style">
+
             <div class="card feature-card">
                 <div class="feature-img-wrapper">
                     <img src="images/person-circle.svg" alt="図書" class="feature-img">
@@ -76,6 +78,7 @@ pageEncoding="UTF-8"%>
                   <p class="card-text">ユーザ情報を確認できます</p>
               </div>
             </div>
+          </a>
         </div>
     </div>
   </div>
