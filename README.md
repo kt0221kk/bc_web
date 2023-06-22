@@ -17,6 +17,9 @@
 以下のURLをブラウザで開いてください：   
 http://localhost:8080/library_management_system_bc/
 
+ユーザ：kawamura
+
+パスワード:kawamura
 ## データベースへのアクセス方法
 
 ### 方法1: Docker Composeコマンドを使用する
