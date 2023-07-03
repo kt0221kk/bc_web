@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+
+    <title>Hello, world!</title>
+    <style>
+        .test_calendar {
+          font-size: 2.2rem;
+        }
+    </style>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    
+  </head>
+  <body>
+    <div class="container-fluid">
+        <div class="row">
+          <div class="col p-0">
+            <div style="height: 10vh;">Column 1</div>
+          </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row ">
+            <div class="pt-4" style="background-color:#ADE0EE;">
+                <h2>あああさんこんにちは</h2>
+                <hr class="mt-0">
+            </div>
+          <div class="col-4 p-0">
+            <div style="height: 90vh; background-color:#ADE0EE;">
+                <h3 class="text-center">
+                    本日の授業予定
+                </h3>
+                <!-- <div class="rounded"style="height: 70vh; background-color:white;">
+                </div>   -->
+                <p class="bg-white text-white rounded-3 p-3 ms-5 me-2" style="height: 60vh;">....</p>
+
+            </div>
+          </div>
+          <div class="col-2 p-0">
+            <div style="height: 90vh; background-color:#90D7EC;">Column 3
+            </div>
+          </div>
+          <div class="col-5 p-0">
+            <div style="height: 90vh; background-color:#90D7EC;">Column 2
+                <!-- <form class="card p-4">
+                    <div class="input-group date mb-3" id="datetimepicker1" data-target-input="nearest">
+                      <label for="datetimepicker1" class="pt-2 pr-2">日付1：</label>
+                      <div class="input-daterange input-group">
+                    <input type="text" class="input-sm form-control" id="start_date" name="start">
+                    <span class="input-group-addon"></span>
+                    <input type="text" id="end_date" class="input-sm form-control" placeholder="貸出期間選択" name="end"required/>
+                </div>
+                    </div>
+                  </form> -->
+                <div class="test_calendar"></div>
+                <div class=" bg-white"id='calendar'></div>
+    
+
+            </div>
+          </div>
+
+        </div>
+    </div>
+    <script>
+        $('.input-daterange').datepicker({
+        todayBtn: "linked",
+        multidateSeparator: ",",
+        orientation: "right bottom",
+        // daysOfWeekHighlighted: "1,5",
+        toggleActive: true,
+        clearBtn: true,
+        todayBtn: false,
+        endDate: '+2m',
+        startDate: '+0d',
+    });
+    // $('.test_calendar').datepicker({
+    //     language: "ja"
+    // }); 
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    dateClick: function(info) {
+    console.log('Clicked on: ' + info.dateStr);
+    // Remove any existing background color from all dates
+    $('.fc-day').css('background-color', '');
+
+    // Add a background color to the clicked date
+    $(info.dayEl).css('background-color', '#FAA');
+  },
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+    calendar.render();
+});
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  </body>
+</html>
